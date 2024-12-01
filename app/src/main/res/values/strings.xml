@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">BipolarSymptomTracker</string>
+
+    <string name="md_ref_symptom_temp1_title">TEMP</string>
+    <string name="md_ref_symptom_temp2_title">TEMP</string>
+    <string name="md_ref_symptom_temp3_title">TEMP</string>
+    <string name="md_ref_symptom_temp4_title">TEMP</string>
+    <string name="md_ref_symptom_temp5_title">TEMP</string>
+
+    <string name="md_ref_symptom_temp1_desc">TEMP</string>
+    <string name="md_ref_symptom_temp2_desc">TEMP</string>
+    <string name="md_ref_symptom_temp3_desc">TEMP</string>
+    <string name="md_ref_symptom_temp4_desc">TEMP</string>
+    <string name="md_ref_symptom_temp5_desc">TEMP</string>
+    <string name="title_activity_entry_screen">EntryScreenActivity</string>
+    <string name="title_activity_setup">SetupActivity</string>
 </resources>
