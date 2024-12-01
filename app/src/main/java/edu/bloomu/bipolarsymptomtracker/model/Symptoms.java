@@ -4,10 +4,10 @@ import android.content.Context;
 
 import edu.bloomu.bipolarsymptomtracker.R;
 
-public class SymptomList {
+public class Symptoms {
 	public Symptom[] li;
 
-	public SymptomList(Context context) {
+	public Symptoms(Context context) {
 		li = new Symptom[5];
 
 		li[0] = new Symptom(context.getString(R.string.md_ref_symptom_temp1_title), context.getString(R.string.md_ref_symptom_temp1_desc));

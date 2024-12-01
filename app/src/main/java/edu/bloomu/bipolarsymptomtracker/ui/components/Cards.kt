@@ -1,10 +1,12 @@
-package edu.bloomu.bipolarsymptomtracker.ui
+package edu.bloomu.bipolarsymptomtracker.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import edu.bloomu.bipolarsymptomtracker.model.Symptom
 
@@ -34,8 +37,49 @@ fun BasicCard(
             .padding(8.dp),
         border = BorderStroke(2.dp, borderColor)
     ) {
-        Box {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             content()
+        }
+    }
+}
+
+@Composable
+fun HomeScreenNavCard(
+    borderColor: Color,
+    title: String,
+    desc: String,
+    //icon
+    modifier: Modifier
+) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val screenHeight = configuration.screenHeightDp.dp
+    BasicCard(
+        modifier = modifier
+            .size(screenWidth, screenHeight / 4)
+            .padding(8.dp),
+        borderColor = borderColor
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier.padding(8.dp)
+        ) {
+            Text(title)
+            //icon
+        }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier.padding(8.dp)
+        ) {
+            Text(desc)
         }
     }
 }

@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -43,5 +45,38 @@ fun Greeting2(name: String, modifier: Modifier = Modifier) {
 fun GreetingPreview2() {
     BipolarSymptomTrackerTheme {
         Greeting2("Android")
+    }
+}
+
+// SECTIONS OF THIS SCREEN:
+
+// 1. Top - contains screen title, date of entry, edit button
+// 2. Mood entry
+// 3. Symptom list
+// 4. Med check
+// 5. Drug check
+// 6. Save
+
+@Composable
+fun MainContainer() {
+    Column {
+        Row { // header
+
+        }
+        Row { // mood
+
+        }
+        Row { // symptoms
+
+        }
+        Row { // med check
+
+        }
+        Row { // drug check
+
+        }
+        Row { // save button
+
+        }
     }
 }
