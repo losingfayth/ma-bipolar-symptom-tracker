@@ -1,15 +1,18 @@
 package edu.bloomu.bipolarsymptomtracker.model
 
-class Mood(vLow: Boolean, low: Boolean, neutral: Boolean, high: Boolean, vHigh: Boolean) {
-    private var vLow = vLow;
-    private var low = low;
-    private var neutral = neutral;
-    private var high = high;
-    private var vHigh = vHigh;
+class Mood(
+    private var vLow: Boolean,
+    private var low: Boolean,
+    private var neutral: Boolean,
+    private var high: Boolean,
+    private var vHigh: Boolean
+) {
 
     constructor() : this(false, false, false, false, false)
 
-    fun setMood(mood: MoodLevel, bool: Boolean) {
+    fun setMood(
+        mood: MoodLevel, bool: Boolean
+    ) {
         when(mood) {
             MoodLevel.VERY_LOW -> vLow = bool
             MoodLevel.LOW -> low = bool
@@ -19,7 +22,9 @@ class Mood(vLow: Boolean, low: Boolean, neutral: Boolean, high: Boolean, vHigh: 
         }
     }
 
-    fun toggleMood(mood: MoodLevel) {
+    fun toggleMood(
+        mood: MoodLevel
+    ) {
         when(mood) {
             MoodLevel.VERY_LOW -> vLow = !vLow
             MoodLevel.LOW -> low = !low
@@ -29,7 +34,10 @@ class Mood(vLow: Boolean, low: Boolean, neutral: Boolean, high: Boolean, vHigh: 
         }
     }
 
-    fun getMood(mood: MoodLevel): Boolean {
+    fun getMood(
+        mood: MoodLevel
+    ): Boolean
+    {
         return when(mood) {
             MoodLevel.VERY_LOW -> vLow
             MoodLevel.LOW -> low

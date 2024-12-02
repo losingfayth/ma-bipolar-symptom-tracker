@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import androidx.room.util.TableInfo
 import edu.bloomu.bipolarsymptomtracker.R
 import edu.bloomu.bipolarsymptomtracker.ui.components.BasicCard
@@ -30,7 +33,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BipolarSymptomTrackerTheme {
-                MainContainer(modifier = Modifier)
+
             }
         }
     }
@@ -38,6 +41,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainContainer(
+
+) {
+    val navController = rememberNavController()
+    Scaffold(
+
+    ) {
+
+    }
+}
+
+@Composable
+fun Home(
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -75,4 +90,11 @@ fun MainContainer(
             })
         )
     }
+}
+
+@Composable
+fun BottomAppBar(
+    navController: NavController
+) {
+
 }

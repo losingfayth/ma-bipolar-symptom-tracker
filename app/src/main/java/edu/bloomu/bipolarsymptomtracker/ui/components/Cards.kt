@@ -138,7 +138,7 @@ fun SymptomCard(
                 )
                 Text(
                     symptom.getName(),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.displaySmall,
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }

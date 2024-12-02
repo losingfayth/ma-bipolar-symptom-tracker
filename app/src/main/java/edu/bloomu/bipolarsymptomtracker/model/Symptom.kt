@@ -1,12 +1,15 @@
 package edu.bloomu.bipolarsymptomtracker.model
 
-class Symptom(name: String, desc: String, indicates: State, symptomatic: Boolean) {
-    private var name = name;
-    private var desc = desc;
-    private var indicates = indicates
-    private var symptomatic = symptomatic;
+class Symptom(
+    private val name: String,
+    private val desc: String,
+    private val indicates: State,
+    private var symptomatic: Boolean) {
 
-    constructor(name: String, desc: String, indicates: State)  : this(name, desc, indicates, false)
+    constructor(
+        name: String,
+        desc: String,
+        indicates: State)  : this(name, desc, indicates, false)
 
     fun toggleSymptomatic() { symptomatic = !symptomatic; }
     fun isSymptomatic(): Boolean { return symptomatic; }
