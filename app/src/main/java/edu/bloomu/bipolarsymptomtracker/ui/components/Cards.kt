@@ -9,16 +9,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,12 +38,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import edu.bloomu.bipolarsymptomtracker.R
 import edu.bloomu.bipolarsymptomtracker.model.Symptom
+import kotlin.math.exp
 
 @Composable
 fun BasicCard(
     modifier: Modifier,
-    //borderColor: Color,
     content: @Composable () -> Unit
 ) {
     val shape = RoundedCornerShape(24.dp)
@@ -41,14 +53,13 @@ fun BasicCard(
         colors = CardDefaults.cardColors(),
         modifier = modifier
             .padding(8.dp)
-        //border = BorderStroke(2.dp, borderColor)
     ) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            //horizontalAlignment = Alignment.CenterHorizontally,
+            //verticalArrangement = Arrangement.Center
         ) {
             content()
         }
@@ -57,7 +68,6 @@ fun BasicCard(
 
 @Composable
 fun HomeScreenNavCard(
-    //borderColor: Color,
     title: String,
     desc: String,
     icon: Painter,
@@ -103,18 +113,50 @@ fun SymptomCard(
     symptom: Symptom,
     modifier: Modifier
 ) {
+    var expanded by remember { mutableStateOf(false) }
+
     BasicCard(
-        modifier = modifier.size(200.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
     )
     {
         Row(
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            Text(symptom.getName(), style = MaterialTheme.typography.titleLarge)
-            Text(symptom.getDesc(), style = MaterialTheme.typography.bodyLarge)
-            Switch(checked = symptom.isSymptomatic(), onCheckedChange = { symptom.toggleSymptomatic(); })
+            // Checkbox and Name
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
+                Checkbox(
+                    checked = symptom.isSymptomatic(),
+                    onCheckedChange = { symptom.toggleSymptomatic() }
+                )
+                Text(
+                    symptom.getName(),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+
+            // Icon Button
+            IconButton(onClick = { expanded = !expanded }) {
+                val icon = if (expanded) R.drawable.arrow_drop_down_24px else R.drawable.arrow_left_24px
+                Icon(painter = painterResource(id = icon), contentDescription = null)
+            }
+        }
+
+        // Description (Expanded Content)
+        if (expanded) {
+            Text(
+                symptom.getDesc(),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
     }
 }
