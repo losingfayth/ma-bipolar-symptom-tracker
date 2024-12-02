@@ -1,9 +1,11 @@
 package edu.bloomu.bipolarsymptomtracker.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.room.util.TableInfo
 import edu.bloomu.bipolarsymptomtracker.R
@@ -26,7 +30,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BipolarSymptomTrackerTheme {
-                MainContainer(borderColor = MaterialTheme.colorScheme.onBackground)
+                MainContainer(modifier = Modifier)
             }
         }
     }
@@ -34,7 +38,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainContainer(
-    borderColor: Color,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -43,23 +46,33 @@ fun MainContainer(
         modifier = modifier
             .fillMaxSize()
     ) {
+        val context = LocalContext.current
+
         HomeScreenNavCard(
-            borderColor,
             stringResource(id = R.string.md_ref_home_new_entry_title),
             stringResource(id = R.string.md_ref_home_new_entry_desc),
-            modifier = modifier)
+            painterResource(id = R.drawable.edit_square_24px),
+            modifier = Modifier.clickable(onClick = {
+                context.startActivity(Intent(context, EntryScreenActivity::class.java))
+            })
+        )
 
         HomeScreenNavCard(
-            borderColor,
             stringResource(id = R.string.md_ref_home_view_entries_title),
             stringResource(id = R.string.md_ref_home_view_entries_desc),
-            modifier = modifier)
+            painterResource(id = R.drawable.library_books_24px),
+            modifier = Modifier.clickable(onClick = {
+                context.startActivity(Intent(context, ViewEntriesActivity::class.java))
+            })
+        )
 
         HomeScreenNavCard(
-            borderColor,
             stringResource(id = R.string.md_ref_home_cycle_analysis_title),
             stringResource(id = R.string.md_ref_home_cycle_analysis_desc),
-            modifier = modifier)
+            painterResource(id = R.drawable.sentiment_very_satisfied_24px),
+            modifier = Modifier.clickable(onClick = {
+                context.startActivity(Intent(context, EntryScreenActivity::class.java))
+            })
+        )
     }
-
 }

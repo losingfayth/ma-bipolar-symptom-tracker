@@ -12,7 +12,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import edu.bloomu.bipolarsymptomtracker.model.Symptoms
+import edu.bloomu.bipolarsymptomtracker.ui.components.MoodDial
+import edu.bloomu.bipolarsymptomtracker.ui.components.SymptomList
 import edu.bloomu.bipolarsymptomtracker.ui.theme.BipolarSymptomTrackerTheme
 
 class EntryScreenActivity : ComponentActivity() {
@@ -21,30 +25,9 @@ class EntryScreenActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BipolarSymptomTrackerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting2(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MainContainer()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    BipolarSymptomTrackerTheme {
-        Greeting2("Android")
     }
 }
 
@@ -64,10 +47,14 @@ fun MainContainer() {
 
         }
         Row { // mood
-
+            MoodDial()
         }
         Row { // symptoms
-
+            val context = LocalContext.current
+            SymptomList(
+                symptoms = Symptoms(context),
+                modifier = Modifier
+            )
         }
         Row { // med check
 
