@@ -39,5 +39,9 @@ object Icons {
             @Composable get() = painterResource(id = R.drawable.ic_article)
         val List: Painter
             @Composable get() = painterResource(id = R.drawable.ic_list_alt)
+        val Settings: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_settings)
+        val Analytics: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_analytics)
     }
 }
