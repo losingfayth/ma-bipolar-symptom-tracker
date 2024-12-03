@@ -39,8 +39,8 @@ import edu.bloomu.bipolarsymptomtracker.ui.theme.BipolarSymptomTrackerTheme
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Icons
 
 class MainActivity : ComponentActivity() {
-    lateinit var database: AppDatabase
-    lateinit var repository: EntryRepository
+    private lateinit var database: AppDatabase
+    private lateinit var repository: EntryRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +63,7 @@ fun MainContainer(
     val navController = rememberNavController()
     var title by remember{ mutableStateOf("Your analysis") }
 
-    var viewModel = EntryViewModel(repository)
+    val viewModel = EntryViewModel(repository)
 
     Scaffold(
         bottomBar = {

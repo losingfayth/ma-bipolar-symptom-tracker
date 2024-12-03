@@ -14,6 +14,9 @@ interface EntryDao {
     @Query("SELECT * FROM entries WHERE date = :date")
     suspend fun getEntry(date: String): Entry?
 
+    @Query("SELECT * FROM entries WHERE id = :id")
+    suspend fun getEntry(id: Int): Entry?
+
     @Query("SELECT * FROM entries")
     suspend fun getAll(): List<Entry>
 

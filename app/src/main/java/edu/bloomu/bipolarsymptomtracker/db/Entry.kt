@@ -15,8 +15,8 @@ data class Entry(
     @ColumnInfo(name = "date") val date: String,
     @ColumnInfo(name = "symptoms") val symptoms: Symptoms,
     @ColumnInfo(name = "mood") val mood: Mood,
-    @ColumnInfo(name = "meds") val meds: Boolean,
-    @ColumnInfo(name = "drugs") val drugs: Boolean
+    @ColumnInfo(name = "meds") val meds: Boolean = false,
+    @ColumnInfo(name = "drugs") val drugs: Boolean = false
 ) {
     @get:Ignore
     val analysis: State

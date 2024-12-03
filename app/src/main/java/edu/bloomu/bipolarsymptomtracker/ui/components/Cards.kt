@@ -1,20 +1,15 @@
 package edu.bloomu.bipolarsymptomtracker.ui.components
 
-import android.content.Context
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -22,9 +17,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,15 +25,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.bloomu.bipolarsymptomtracker.R
+import edu.bloomu.bipolarsymptomtracker.db.Entry
+import edu.bloomu.bipolarsymptomtracker.model.State
 import edu.bloomu.bipolarsymptomtracker.model.Symptom
-import kotlin.math.exp
+import edu.bloomu.bipolarsymptomtracker.ui.theme.Icons
 
 @Composable
 fun BasicCard(
@@ -163,15 +156,28 @@ fun SymptomCard(
 
 @Composable
 fun EntryCard(
-    icon: ImageVector,
-    modifier: Modifier
+    entry: Entry,
+    modifier: Modifier,
+    onClick: () -> Unit
 ) {
     BasicCard(
-        modifier = modifier,
+        modifier = modifier
+            .clickable { onClick() },
     ) {
-        Image(
-            imageVector = icon,
-            contentDescription = ""
+        Icon(
+            painter = when (entry.analysis) {
+                State.MANIC -> Icons.Outlined.MoodVHigh
+                State.HYPO_MANIC -> Icons.Outlined.MoodVHigh
+                State.DEPRESSIVE -> Icons.Outlined.MoodVLow
+                State.HYPO_DEPRESSIVE -> Icons.Outlined.MoodVLow
+                else -> Icons.Outlined.MoodNeutral
+            },
+            contentDescription = "",
+            tint = MaterialTheme.colorScheme.error
+        )
+        Text(
+            text = entry.date,
+            style = MaterialTheme.typography.headlineLarge
         )
     }
 }
