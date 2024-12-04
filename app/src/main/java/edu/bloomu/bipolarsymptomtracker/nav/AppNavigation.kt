@@ -4,7 +4,8 @@ enum class Screen {
     ANALYSIS,
     ENTRY_SCREEN,
     ENTRIES,
-    SETTINGS
+    SETTINGS,
+    WELCOME
 }
 
 sealed class NavigationItem(
@@ -14,4 +15,5 @@ sealed class NavigationItem(
     object EntryScreen : NavigationItem(Screen.ENTRY_SCREEN.name)
     object Entries : NavigationItem(Screen.ENTRIES.name)
     object Settings : NavigationItem(Screen.SETTINGS.name)
+    object Welcome : NavigationItem(Screen.WELCOME.name)
 }

@@ -1,6 +1,5 @@
 package edu.bloomu.bipolarsymptomtracker.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -25,8 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.bloomu.bipolarsymptomtracker.R
@@ -55,48 +51,6 @@ fun BasicCard(
             //verticalArrangement = Arrangement.Center
         ) {
             content()
-        }
-    }
-}
-
-@Composable
-fun HomeScreenNavCard(
-    title: String,
-    desc: String,
-    icon: Painter,
-    modifier: Modifier
-) {
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val screenHeight = configuration.screenHeightDp.dp
-    BasicCard(
-        modifier = modifier
-            .size(screenWidth, screenHeight / 4)
-            .padding(8.dp),
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.Top,
-            modifier = modifier.padding(8.dp)
-        ) {
-            Image(icon, "")
-            Text(
-                text = title,
-                style = MaterialTheme.typography.displayLarge,
-                modifier = Modifier
-            )
-            //icon
-        }
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.Top,
-            modifier = modifier.padding(8.dp)
-        ) {
-            Text(
-                text = desc,
-                style = MaterialTheme.typography.displayMedium,
-                modifier = Modifier
-            )
         }
     }
 }
@@ -131,7 +85,7 @@ fun SymptomCard(
                 )
                 Text(
                     symptom.getName(),
-                    style = MaterialTheme.typography.displaySmall,
+                    style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }

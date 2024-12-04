@@ -63,4 +63,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     ksp("androidx.room:room-compiler:2.6.1")
+   //implementation(kotlin("reflect"))
+    implementation ("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
 }

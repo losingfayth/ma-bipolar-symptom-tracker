@@ -43,5 +43,19 @@ object Icons {
             @Composable get() = painterResource(id = R.drawable.ic_settings)
         val Analytics: Painter
             @Composable get() = painterResource(id = R.drawable.ic_analytics)
+        val AnalysisManic: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_sentiment_very_satisfied)
+        val AnalysisDepressive: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_sentiment_sad)
+        val AnalysisUnstable: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_sentiment_neutral)
+        val AnalysisHypoManic: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_sentiment_dissatisfied)
+        val AnalysisHypoDepressive: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_sentiment_dissatisfied)
+        val AnalysisNone: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_sentiment_neutral)
+        val CalendarDay: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_calendar_today)
     }
 }

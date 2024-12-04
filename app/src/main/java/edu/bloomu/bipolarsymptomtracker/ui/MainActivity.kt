@@ -82,8 +82,8 @@ fun MainContainer(
                                 title = "Your analysis"
                                       },
                             icon = Icons.Outlined.Analytics,
-                            text = "Analysis",
-                            initiallySelected = true
+                            text = "Analysis"
+                            //initiallySelected = true
                         )
                         NavButton(
                             onClick = {
@@ -91,7 +91,8 @@ fun MainContainer(
                                 title = "View entries"
                                       },
                             icon = Icons.Outlined.List,
-                            text = "Entries"
+                            text = "Entries",
+                            initiallySelected = true
                         )
                     }
                 },

@@ -13,10 +13,10 @@ import edu.bloomu.bipolarsymptomtracker.model.Symptoms
 data class Entry(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "date") val date: String,
-    @ColumnInfo(name = "symptoms") val symptoms: Symptoms,
-    @ColumnInfo(name = "mood") val mood: Mood,
-    @ColumnInfo(name = "meds") val meds: Boolean = false,
-    @ColumnInfo(name = "drugs") val drugs: Boolean = false
+    @ColumnInfo(name = "symptoms") var symptoms: Symptoms,
+    @ColumnInfo(name = "mood") var mood: Mood,
+    @ColumnInfo(name = "meds") var meds: Boolean = false,
+    @ColumnInfo(name = "drugs") var drugs: Boolean = false
 ) {
     @get:Ignore
     val analysis: State

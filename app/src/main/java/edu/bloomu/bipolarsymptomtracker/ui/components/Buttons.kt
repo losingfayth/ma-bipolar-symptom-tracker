@@ -1,16 +1,25 @@
 package edu.bloomu.bipolarsymptomtracker.ui.components
 
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +32,72 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.bloomu.bipolarsymptomtracker.R
+
+@Composable
+fun SwitchButton(
+    onClick: () -> Unit,
+    content: @Composable () -> Unit,
+    initiallySelected: Boolean = false,
+    modifier: Modifier = Modifier
+) {
+    var selected by remember { mutableStateOf(initiallySelected) }
+
+    BasicCard(
+        modifier = modifier
+            .clickable { onClick(); selected = !selected }
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
+        Row() {
+            content()
+            Switch(
+                checked = selected,
+                onCheckedChange = { }
+            )
+        }
+    }
+}
+
+@Composable
+fun SwitchButton(
+    onClick: () -> Unit,
+    text: String,
+    initiallySelected: Boolean = false,
+    modifier: Modifier = Modifier
+) {
+    SwitchButton(
+        onClick = onClick,
+        initiallySelected = initiallySelected,
+        modifier = modifier,
+        content = {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+    )
+}
+
+@Composable
+fun ArrowButton(
+    onClick: () -> Unit,
+    painter: Painter
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = Modifier
+            .border(1.dp, MaterialTheme.colorScheme.primary, shape = CircleShape)
+    ) {
+        Icon(
+            painter = painter,
+            contentDescription = "",
+            modifier = Modifier
+                .size(24.dp)
+        )
+    }
+}
+
 
 @Composable
 fun SmallFabDefault(
