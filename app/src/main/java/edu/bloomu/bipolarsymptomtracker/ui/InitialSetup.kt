@@ -17,7 +17,9 @@ import edu.bloomu.bipolarsymptomtracker.ui.components.NumberPicker
 import edu.bloomu.bipolarsymptomtracker.ui.theme.AppText
 
 @Composable
-fun InitialSetup() {
+fun InitialSetup(
+    onFabChange: (fab: @Composable () -> Unit) -> Unit
+) {
     val context = LocalContext.current
     val sharedPreferences = remember {
         context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)

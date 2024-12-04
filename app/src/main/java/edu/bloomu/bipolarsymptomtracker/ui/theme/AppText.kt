@@ -91,31 +91,45 @@ object AppText {
         object Manic {
             val Title = "Manic"
             val Desc = ""
+            val ImageDesc = ""
+            val Body = ""
         }
         object HypoManic {
             val Title = "Hypo-Manic"
             val Desc = ""
+            val ImageDesc = ""
+            val Body = ""
         }
         object Depressed {
             val Title = "Depressed"
             val Desc = ""
+            val ImageDesc = ""
+            val Body = ""
         }
         object HypoDepressed {
-            val Title = "HypoDepressed"
+            val Title = "Hypo-Depressed"
             val Desc = ""
+            val ImageDesc = ""
+            val Body = ""
         }
         object Unknown {
             val Title = "Unknown"
             val Desc = "It looks like there isn't quite enough data to get an analysis on you"
             val Hint = "Once you start logging some entries, you'll get an analysis!"
+            val ImageDesc = ""
+            val Body = "Once you log a couple of entries, an analysis will be available here"
         }
         object Unstable {
             val Title = "Unstable"
             val Desc = ""
+            val ImageDesc = ""
+            val Body = ""
         }
         object Neutral {
             val Title = "Neutral"
             val Desc = ""
+            val ImageDesc = ""
+            val Body = ""
         }
     }
     object WelcomeText {
@@ -136,5 +150,16 @@ object AppText {
         val Name = "Update name"
         val CycleLength = "Adjust cycle length"
         val About = "About"
+    }
+    object ScreenTitles {
+        val Welcome = ""
+        val Entries = "Your entries"
+        val EntryScreen = "Entry"
+        val Settings = "Settings"
+        val Analysis = "Your analysis"
+    }
+    object NavigationBar {
+        val Analysis = "Analysis"
+        val Entries = "Entries"
     }
 }

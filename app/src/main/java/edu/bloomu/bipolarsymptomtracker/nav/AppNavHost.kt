@@ -13,31 +13,60 @@ import edu.bloomu.bipolarsymptomtracker.ui.Entries
 import edu.bloomu.bipolarsymptomtracker.ui.EntryScreen
 import edu.bloomu.bipolarsymptomtracker.ui.InitialSetup
 import edu.bloomu.bipolarsymptomtracker.ui.SettingsScreen
+import edu.bloomu.bipolarsymptomtracker.ui.theme.AppText
 
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: String = NavigationItem.Welcome.route,
-    viewModel: EntryViewModel
+    startDestination: String = NavigationItem.Entries.route,
+    viewModel: EntryViewModel,
+    onValueChange: (String) -> Unit,
+    onFabChange: (fab: @Composable () -> Unit) -> Unit
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
     ) {
-        composable(NavigationItem.Analysis.route) { Analysis(viewModel) }
-        composable(NavigationItem.Entries.route) { Entries(viewModel, navController) }
-        composable(NavigationItem.Settings.route) { SettingsScreen() }
-        composable(NavigationItem.Welcome.route) { InitialSetup() }
+        composable(NavigationItem.Analysis.route) {
+            Analysis(
+                viewModel = viewModel,
+                navController = navController,
+                onFabChange = onFabChange
+            );
+            onValueChange(AppText.ScreenTitles.Analysis)
+        }
+        composable(NavigationItem.Entries.route) {
+            Entries(
+                viewModel = viewModel,
+                navController = navController,
+                onFabChange = onFabChange
+            );
+            onValueChange(AppText.ScreenTitles.Entries)
+        }
+        composable(NavigationItem.Settings.route) {
+            SettingsScreen(
+                onFabChange = onFabChange,
+                viewModel = viewModel
+            );
+            onValueChange(AppText.ScreenTitles.Settings)
+        }
+        composable(NavigationItem.Welcome.route) {
+            InitialSetup(
+                onFabChange = onFabChange
+            );
+            onValueChange(AppText.ScreenTitles.Welcome) }
         composable(
             route = NavigationItem.EntryScreen.route + "/{entryId}",
             arguments = listOf(navArgument("entryId") { type = NavType.IntType } )
         ) { backStackEntry ->
             EntryScreen(
                 viewModel = viewModel,
-                entryId = backStackEntry.arguments?.getInt("entryId") ?: 0
+                entryId = backStackEntry.arguments?.getInt("entryId") ?: 0,
+                onFabChange = onFabChange
             )
+            onValueChange(AppText.ScreenTitles.EntryScreen)
         }
     }
 }

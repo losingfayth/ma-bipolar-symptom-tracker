@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -23,13 +24,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.bloomu.bipolarsymptomtracker.R
 import edu.bloomu.bipolarsymptomtracker.db.Entry
 import edu.bloomu.bipolarsymptomtracker.model.State
 import edu.bloomu.bipolarsymptomtracker.model.Symptom
+import edu.bloomu.bipolarsymptomtracker.model.formatDate
+import edu.bloomu.bipolarsymptomtracker.model.formatTime
+import edu.bloomu.bipolarsymptomtracker.ui.theme.DisplayUnits
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Icons
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_depression
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_mania
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_neutral
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_unstable
 
 @Composable
 fun BasicCard(
@@ -39,7 +49,10 @@ fun BasicCard(
     val shape = RoundedCornerShape(24.dp)
     Card (
         shape = shape,
-        colors = CardDefaults.cardColors(),
+        colors = CardDefaults
+            .cardColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
+            ),
         modifier = modifier
             .padding(8.dp)
     ) {
@@ -118,20 +131,74 @@ fun EntryCard(
         modifier = modifier
             .clickable { onClick() },
     ) {
-        Icon(
-            painter = when (entry.analysis) {
-                State.MANIC -> Icons.Outlined.MoodVHigh
-                State.HYPO_MANIC -> Icons.Outlined.MoodVHigh
-                State.DEPRESSIVE -> Icons.Outlined.MoodVLow
-                State.HYPO_DEPRESSIVE -> Icons.Outlined.MoodVLow
-                else -> Icons.Outlined.MoodNeutral
-            },
-            contentDescription = "",
-            tint = MaterialTheme.colorScheme.error
-        )
-        Text(
-            text = entry.date,
-            style = MaterialTheme.typography.headlineLarge
-        )
+        val tint: Color
+        val painter: Painter
+
+        when (entry.analysis) {
+            State.MANIC -> {
+                painter = Icons.Filled.AnalysisManic;
+                tint = md_theme_light_mania
+            }
+
+            State.HYPO_MANIC -> {
+                painter = Icons.Filled.AnalysisHypoManic;
+                tint = md_theme_light_mania
+            }
+
+            State.DEPRESSIVE -> {
+                painter = Icons.Filled.AnalysisDepressive;
+                tint = md_theme_light_depression
+            }
+
+            State.HYPO_DEPRESSIVE -> {
+                painter = Icons.Filled.AnalysisHypoDepressive;
+                tint = md_theme_light_depression
+            }
+
+            State.UNSTABLE -> {
+                painter = Icons.Filled.AnalysisUnstable;
+                tint = md_theme_light_unstable
+            }
+
+            else -> {
+                painter = Icons.Filled.AnalysisNone;
+                tint = md_theme_light_neutral
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Icon(
+                painter = painter,
+                contentDescription = "",
+                tint = tint,
+                modifier = Modifier
+                    .size(DisplayUnits.Icons.ExxtraLarge)
+                    .padding(DisplayUnits.Padding.Icon)
+            )
+            formatDate(entry.date)?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(
+                            horizontal = DisplayUnits.Padding.CardTitle
+                        )
+                )
+            }
+            formatTime(entry.date)?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(
+                            horizontal = DisplayUnits.Padding.CardTitle
+                        )
+                )
+            }
+        }
     }
 }

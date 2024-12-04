@@ -3,16 +3,16 @@ package edu.bloomu.bipolarsymptomtracker.model
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-fun FormatDate(
+fun formatDate(
     dateString: String
 ): String? {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("EEEE, MMMM d yyyy", Locale.getDefault())
     val parsedDate = inputFormat.parse(dateString)
     return parsedDate?.let { outputFormat.format(it) }
 }
 
-fun FormatTime(
+fun formatTime(
     dateString: String
 ): String? {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())

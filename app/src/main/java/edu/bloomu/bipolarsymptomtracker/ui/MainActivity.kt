@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -34,7 +34,9 @@ import edu.bloomu.bipolarsymptomtracker.db.EntryRepository
 import edu.bloomu.bipolarsymptomtracker.db.EntryViewModel
 import edu.bloomu.bipolarsymptomtracker.nav.AppNavHost
 import edu.bloomu.bipolarsymptomtracker.nav.NavigationItem
+import edu.bloomu.bipolarsymptomtracker.ui.components.LargeFabDefault
 import edu.bloomu.bipolarsymptomtracker.ui.components.NavButton
+import edu.bloomu.bipolarsymptomtracker.ui.theme.AppText
 import edu.bloomu.bipolarsymptomtracker.ui.theme.BipolarSymptomTrackerTheme
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Icons
 
@@ -61,9 +63,16 @@ fun MainContainer(
     repository: EntryRepository
 ) {
     val navController = rememberNavController()
-    var title by remember{ mutableStateOf("Your analysis") }
+    var title by remember{ mutableStateOf("") }
+
 
     val viewModel = EntryViewModel(repository)
+
+    var fab by remember { mutableStateOf<@Composable (() -> Unit)>({ LargeFabDefault(
+        onClick = {},
+        icon = Icons.Outlined.Exit,
+        desc = ""
+    ) }) }
 
     Scaffold(
         bottomBar = {
@@ -79,20 +88,18 @@ fun MainContainer(
                         NavButton(
                             onClick = {
                                 navController.navigate(NavigationItem.Analysis.route);
-                                title = "Your analysis"
                                       },
                             icon = Icons.Outlined.Analytics,
-                            text = "Analysis"
-                            //initiallySelected = true
+                            text = AppText.NavigationBar.Analysis,
+                            selected = title == AppText.ScreenTitles.Analysis
                         )
                         NavButton(
                             onClick = {
                                 navController.navigate(NavigationItem.Entries.route);
-                                title = "View entries"
                                       },
                             icon = Icons.Outlined.List,
-                            text = "Entries",
-                            initiallySelected = true
+                            text = AppText.NavigationBar.Entries,
+                            selected = title == AppText.ScreenTitles.Entries || title == AppText.ScreenTitles.EntryScreen
                         )
                     }
                 },
@@ -105,24 +112,30 @@ fun MainContainer(
             TopAppBar(
                 title = {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                        ,
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
                     ) {
-                        Spacer(modifier = Modifier.weight(1f)) // Spacer on the left
                         Text(
                             text = title,
-                            style = MaterialTheme.typography.titleLarge,
+                            style = MaterialTheme.typography.displaySmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                             modifier = Modifier
-                                .padding(8.dp, 16.dp)
+                                .padding(
+                                    vertical = 24.dp,
+                                    horizontal = 16.dp
+                                )
                         )
-                        Spacer(modifier = Modifier.weight(1f)) // Spacer on the right
                     }
                 },
                 actions = {
                     IconButton(
                         onClick = { navController.navigate(NavigationItem.Settings.route) },
                         modifier = Modifier
-                            .padding(8.dp, 16.dp)
+
                     ) {
                         Icon(Icons.Outlined.Settings, contentDescription = "Localized description")
                     }
@@ -130,15 +143,24 @@ fun MainContainer(
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
+                ),
+                modifier = Modifier
+                    .wrapContentHeight()
             )
+        },
+        floatingActionButton = {
+            fab()
         }
     ) { paddingValues ->
         AppNavHost(
             modifier = Modifier
                 .padding(paddingValues),
             navController = navController,
-            viewModel = viewModel
+            viewModel = viewModel,
+            onValueChange = { value -> title = value },
+            onFabChange = { newFab ->
+                fab = newFab
+            }
         )
     }
 }

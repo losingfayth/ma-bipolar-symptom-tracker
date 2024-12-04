@@ -6,25 +6,55 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import edu.bloomu.bipolarsymptomtracker.db.EntryViewModel
 import edu.bloomu.bipolarsymptomtracker.model.State
 import edu.bloomu.bipolarsymptomtracker.model.StateAnalysis
 import edu.bloomu.bipolarsymptomtracker.model.StateStatus
+import edu.bloomu.bipolarsymptomtracker.ui.components.NewEntryFab
+import edu.bloomu.bipolarsymptomtracker.ui.theme.AppText
+import edu.bloomu.bipolarsymptomtracker.ui.theme.Icons
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_depression
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_mania
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_neutrality
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_unstable
 
 @Composable
 fun Analysis(
-    viewModel: EntryViewModel
+    viewModel: EntryViewModel,
+    navController: NavController,
+    onFabChange: (fab: @Composable () -> Unit) -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        onFabChange {
+            NewEntryFab(
+                viewModel = viewModel,
+                navController = navController
+            )
+        }
+    }
+
     val entries by viewModel.entries.collectAsState()
 
     val recentStates: MutableList<State> = mutableListOf()
@@ -41,6 +71,77 @@ fun Analysis(
 
     val testMe = currentAnalysis.streakLength.toString()
 
+    val analysisColor: Color
+    val analysisPainter: Painter
+    val analysisImageDesc: String
+    val analysisTitle: String
+    val analysisDesc: String
+    val analysisHint: String?
+    val analysisBody: String
+
+    when (currentAnalysis.stateAnalysis) {
+        State.MANIC -> {
+            analysisColor = md_theme_light_mania
+            analysisPainter = Icons.Filled.AnalysisManic
+            analysisTitle = AppText.StateText.Manic.Title
+            analysisDesc = AppText.StateText.Manic.Desc
+            analysisImageDesc = AppText.StateText.Manic.ImageDesc
+            analysisBody = AppText.StateText.Manic.Body
+        }
+        State.HYPO_MANIC -> {
+            analysisColor = md_theme_light_mania
+            analysisPainter = Icons.Filled.AnalysisHypoManic
+            analysisTitle = AppText.StateText.HypoManic.Title
+            analysisDesc = AppText.StateText.HypoManic.Desc
+            analysisImageDesc = AppText.StateText.HypoManic.ImageDesc
+            analysisBody = AppText.StateText.HypoManic.Body
+        }
+        State.DEPRESSIVE -> {
+            analysisColor = md_theme_light_depression
+            analysisPainter = Icons.Filled.AnalysisDepressive
+            analysisTitle = AppText.StateText.Depressed.Title
+            analysisDesc = AppText.StateText.Depressed.Desc
+            analysisImageDesc = AppText.StateText.Depressed.ImageDesc
+            analysisBody = AppText.StateText.Depressed.Body
+        }
+        State.HYPO_DEPRESSIVE -> {
+            analysisColor = md_theme_light_depression
+            analysisPainter = Icons.Filled.AnalysisHypoDepressive
+            analysisTitle = AppText.StateText.HypoDepressed.Title
+            analysisDesc = AppText.StateText.HypoDepressed.Desc
+            analysisImageDesc = AppText.StateText.HypoDepressed.ImageDesc
+            analysisBody = AppText.StateText.HypoDepressed.Body
+        }
+        State.NEUTRAL -> {
+            analysisColor = md_theme_light_neutrality
+            analysisPainter = Icons.Filled.AnalysisNone
+            analysisTitle = AppText.StateText.Neutral.Title
+            analysisDesc = AppText.StateText.Neutral.Desc
+            analysisImageDesc = AppText.StateText.Neutral.ImageDesc
+            analysisBody = AppText.StateText.Neutral.Body
+        }
+        State.UNKNOWN -> {
+            analysisColor = md_theme_light_neutrality
+            analysisPainter = Icons.Filled.AnalysisNone
+            analysisTitle = AppText.StateText.Unknown.Title
+            analysisDesc = AppText.StateText.Unknown.Desc
+            analysisImageDesc = AppText.StateText.Unknown.ImageDesc
+            analysisBody = AppText.StateText.Unknown.Body
+        }
+        State.UNSTABLE -> {
+            analysisColor = md_theme_light_unstable
+            analysisPainter = Icons.Filled.AnalysisUnstable
+            analysisTitle = AppText.StateText.Unstable.Title
+            analysisDesc = AppText.StateText.Unstable.Desc
+            analysisImageDesc = AppText.StateText.Unstable.ImageDesc
+            analysisBody = AppText.StateText.Unstable.Body
+        }
+    }
+
+    val rowModifier = Modifier
+        .wrapContentHeight()
+        .fillMaxWidth()
+
     // Sections
     // 1. Hello, user!
     // 2. Entry map
@@ -55,21 +156,60 @@ fun Analysis(
             .verticalScroll(rememberScrollState())
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
+            modifier = rowModifier
         ) {
             Text("Howdy, user!")
         }
         Row(
-
+            modifier = rowModifier
+                .align(Alignment.CenterHorizontally)
         ) {
-            Text(text = testMe)
+            val configuration = LocalConfiguration.current
+            val iconSize = (configuration.screenWidthDp.dp / 3) * 2
+
+            Icon(
+                painter = analysisPainter,
+                contentDescription = analysisImageDesc,
+                tint = analysisColor,
+                modifier = Modifier
+                    .size(iconSize)
+                    .padding(36.dp)
+            )
         }
         Row(
 
         ) {
-            // You're manic
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = MaterialTheme.typography.displaySmall.toSpanStyle()
+                    ) { append("Looks like you're currently in an ") }
+                    withStyle(
+                        style = MaterialTheme.typography.displayMedium.toSpanStyle().copy(
+                            color = analysisColor,
+                            fontWeight = FontWeight.ExtraBold)
+                    ) { append(analysisTitle) }
+                    withStyle(
+                        style = MaterialTheme.typography.displaySmall.toSpanStyle()
+                    ) { append(" state") }
+                }
+            )
+        }
+        Row(
+
+        ) {
+            Text(
+                text = analysisDesc,
+                style = MaterialTheme.typography.headlineLarge
+            )
+        }
+        Row(
+
+        ) {
+            Text(
+                text = analysisBody,
+                style = MaterialTheme.typography.headlineMedium
+            )
         }
     }
 }

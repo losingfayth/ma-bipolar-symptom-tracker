@@ -11,14 +11,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import edu.bloomu.bipolarsymptomtracker.db.EntryViewModel
-import edu.bloomu.bipolarsymptomtracker.model.FormatDate
-import edu.bloomu.bipolarsymptomtracker.model.FormatTime
 import edu.bloomu.bipolarsymptomtracker.model.State
+import edu.bloomu.bipolarsymptomtracker.model.formatDate
+import edu.bloomu.bipolarsymptomtracker.model.formatTime
 import edu.bloomu.bipolarsymptomtracker.ui.components.MoodDial
 import edu.bloomu.bipolarsymptomtracker.ui.components.RowDivider
+import edu.bloomu.bipolarsymptomtracker.ui.components.SaveFab
 import edu.bloomu.bipolarsymptomtracker.ui.components.SwitchButton
 import edu.bloomu.bipolarsymptomtracker.ui.components.SymptomList
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Icons
@@ -26,11 +28,20 @@ import edu.bloomu.bipolarsymptomtracker.ui.theme.Icons
 @Composable
 fun EntryScreen(
     viewModel: EntryViewModel,
-    entryId: Int
+    entryId: Int,
+    onFabChange: (fab: @Composable () -> Unit) -> Unit
 ) {
-    //var editMode by remember { mutableStateOf(false) }
-
     val entry = viewModel.getEntryById(entryId)
+
+    val save = { if (entry != null) viewModel.insertEntry(entry) }
+
+    LaunchedEffect(Unit) {
+        onFabChange {
+            SaveFab(
+                onClick = save
+            )
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -42,8 +53,8 @@ fun EntryScreen(
         if (entry != null) {
             Row {
 
-                val date = FormatDate(entry.date)
-                val time = FormatTime(entry.date)
+                val date = formatDate(entry.date)
+                val time = formatTime(entry.date)
 
                 Icon(
                     painter = when(entry.analysis) {
