@@ -1,6 +1,6 @@
 package edu.bloomu.bipolarsymptomtracker.model
 
-enum class StateStatus {
+enum class CyclePosition {
     BEGINNING,
     MIDDLE,
     END,

@@ -1,6 +1,5 @@
 package edu.bloomu.bipolarsymptomtracker.nav
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -22,7 +21,6 @@ fun AppNavHost(
     navController: NavHostController,
     startDestination: String = NavigationItem.Welcome.route,
     viewModel: EntryViewModel,
-    innerPadding: PaddingValues,
     onValueChange: (String) -> Unit,
     onFabChange: (fab: @Composable () -> Unit) -> Unit,
     onClick: () -> Unit
@@ -58,7 +56,6 @@ fun AppNavHost(
         }
         composable(NavigationItem.Welcome.route) {
             InitialSetup(
-                onFabChange = onFabChange,
                 onClick = onClick,
                 navController = navController
             );

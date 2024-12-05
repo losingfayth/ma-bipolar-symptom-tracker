@@ -74,14 +74,35 @@ val md_theme_light_button_error = ButtonColors(
     disabledContentColor = md_theme_light_onErrorContainer
 )
 
-val md_theme_light_button_light = ButtonColors(
+val md_theme_light_button_error_pressed = ButtonColors(
+    contentColor = md_theme_light_error,
+    containerColor = md_theme_light_onError,
+    disabledContainerColor = md_theme_light_errorContainer,
+    disabledContentColor = md_theme_light_onErrorContainer
+)
+
+val md_theme_light_button_primary = ButtonColors(
+    containerColor = md_theme_light_primaryContainer,
+    contentColor = md_theme_light_onPrimaryContainer,
+    disabledContainerColor = md_theme_light_errorContainer,
+    disabledContentColor = md_theme_light_onErrorContainer
+)
+
+val md_theme_light_button_primary_pressed = ButtonColors(
+    contentColor = md_theme_light_onPrimaryContainer,
+    containerColor = md_theme_light_primaryContainer,
+    disabledContainerColor = md_theme_light_onErrorContainer,
+    disabledContentColor = md_theme_light_errorContainer
+)
+
+val md_theme_light_button_secondary = ButtonColors(
     containerColor = md_theme_light_secondaryContainer,
     contentColor = md_theme_light_onSecondaryContainer,
     disabledContainerColor = md_theme_light_errorContainer,
     disabledContentColor = md_theme_light_onErrorContainer
 )
 
-val md_theme_light_button_dark = ButtonColors(
+val md_theme_light_button_secondary_pressed = ButtonColors(
     contentColor = md_theme_light_secondaryContainer,
     containerColor = md_theme_light_onSecondaryContainer,
     disabledContainerColor = md_theme_light_onErrorContainer,

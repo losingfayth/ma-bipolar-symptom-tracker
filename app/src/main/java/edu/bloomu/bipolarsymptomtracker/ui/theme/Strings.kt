@@ -132,12 +132,12 @@ object Strings {
         }
     }
     object AnalysisScreenText {
-        val Greeting = "Howdy, "
+        val Greeting = "Howdy,"
         val YourState = "Your current state is "
-        val CyclePositionPrefix = "You're currently "
+        val CyclePositionPrefix = "You're currently"
         val CyclePositionSuffix = " in your cycle"
-        val CycleLengthPrefix = "You've been in this state for "
-        val CycleLengthSuffix = " days"
+        val CycleLengthPrefix = "You've been in this state for"
+        val AverageCycleLengthPreffix = "Your cycles are normally"
     }
     object WelcomeText {
         val Blurb = "Become a different kind of perfect with "
@@ -145,6 +145,8 @@ object Strings {
         val NameEntry = "Your name"
         val CycleLength = "Your average episode length"
         val ButtonText = "Let's get started"
+        val TitlePrefix = "Hello,"
+        val TitleHighlight = "you"
     }
     object SharedPrefKeys {
         val SharedPreferences = "app_preferences"

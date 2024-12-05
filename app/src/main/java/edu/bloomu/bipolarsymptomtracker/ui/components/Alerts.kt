@@ -18,7 +18,7 @@ import edu.bloomu.bipolarsymptomtracker.ui.theme.Painters
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Units
 import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_error
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_light
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_secondary
 
 @Composable
 fun SuccessDialog(
@@ -62,7 +62,7 @@ fun SuccessDialog(
             dismissButton = {
                 Button(
                     onClick = { onConfirm() },
-                    colors = md_theme_light_button_light
+                    colors = md_theme_light_button_secondary
                 ) {
                     Text(
                         text = Strings.Settings.SuccessDialog.SaveSettings.Button,
@@ -141,7 +141,7 @@ fun ConfirmDialog(
             dismissButton = {
                 Button(
                     onClick = { onCancel() },
-                    colors = md_theme_light_button_light
+                    colors = md_theme_light_button_secondary
                 ) {
                     Text(
                         text = cancelText,

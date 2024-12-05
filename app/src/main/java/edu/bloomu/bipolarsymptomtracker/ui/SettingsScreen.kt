@@ -13,7 +13,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,6 +33,7 @@ import edu.bloomu.bipolarsymptomtracker.db.EntryViewModel
 import edu.bloomu.bipolarsymptomtracker.ui.components.ConfirmDialog
 import edu.bloomu.bipolarsymptomtracker.ui.components.SaveFab
 import edu.bloomu.bipolarsymptomtracker.ui.components.SuccessDialog
+import edu.bloomu.bipolarsymptomtracker.ui.components.UsernameField
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Units
 import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_error
@@ -119,21 +119,11 @@ fun SettingsScreen(
             modifier = modifier
         ) {
             usersName?.let {
-                TextField(
-                    value = it,
+                UsernameField(
+                    currName = usersName!!,
                     onValueChange = { newValue ->
                         usersName = newValue
-                    },
-                    textStyle = MaterialTheme.typography.titleMedium,
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            text = Strings.WelcomeText.NameEntry,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    }
                 )
             }
         }

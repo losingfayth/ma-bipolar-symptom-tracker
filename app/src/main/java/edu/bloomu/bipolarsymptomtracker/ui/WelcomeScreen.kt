@@ -9,11 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -24,19 +22,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.bloomu.bipolarsymptomtracker.R
 import edu.bloomu.bipolarsymptomtracker.nav.NavigationItem
+import edu.bloomu.bipolarsymptomtracker.ui.components.HighlightText
+import edu.bloomu.bipolarsymptomtracker.ui.components.UsernameField
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Units
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_depressed
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_primary
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_hypo_manic
 
 @Composable
 fun InitialSetup(
-    onFabChange: (fab: @Composable () -> Unit) -> Unit,
     onClick: () -> Unit,
     navController: NavController
 ) {
@@ -62,45 +60,25 @@ fun InitialSetup(
                 horizontal = Units.Row.Padding.Horizontal,
                 vertical = Units.Row.Padding.Vertical
             )
-
         Row(
             modifier = modifier
         ) {
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(
-                        style = MaterialTheme.typography.displayMedium.toSpanStyle()
-                            .copy(
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                    ) { append("Hello, \t")}
-                    withStyle(
-                        style = MaterialTheme.typography.displayMedium.toSpanStyle()
-                            .copy(
-                                color = md_theme_light_state_depressed,
-                            )
-                    ) { append("you")}
-                }
+            HighlightText(
+                prefix = Strings.WelcomeText.TitlePrefix,
+                prefixStyle = MaterialTheme.typography.displayMedium,
+                highlight = Strings.WelcomeText.TitleHighlight,
+                highlightStyle = MaterialTheme.typography.displayMedium,
+                highlightColor = md_theme_light_state_hypo_manic
             )
         }
         Row(
             modifier = modifier
         ) {
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(
-                        style = MaterialTheme.typography.headlineSmall.toSpanStyle()
-                            .copy(
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                    ) { append(Strings.WelcomeText.Blurb)}
-                    withStyle(
-                        style = MaterialTheme.typography.headlineMedium.toSpanStyle()
-                            .copy(
-                                color = MaterialTheme.colorScheme.tertiary,
-                            )
-                    ) { append(stringResource(R.string.app_name))}
-                }
+            HighlightText(
+                prefix = Strings.WelcomeText.Blurb,
+                prefixStyle = MaterialTheme.typography.headlineSmall,
+                highlight = stringResource(R.string.app_name),
+                highlightStyle = MaterialTheme.typography.headlineMedium
             )
         }
         Row(
@@ -108,14 +86,11 @@ fun InitialSetup(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
         ) {
-            TextField(
-                value = usersName,
+            UsernameField(
+                currName = usersName,
                 onValueChange = { newValue ->
                     usersName = newValue
-                },
-                textStyle = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
+                }
             )
         }
         Row(
@@ -153,7 +128,6 @@ fun InitialSetup(
                             )
                             .fillMaxWidth()
                     )
-
                 }
             }
         }
@@ -176,12 +150,7 @@ fun InitialSetup(
                     onClick()
                     navController.navigate(NavigationItem.Analysis.route)
                 },
-                colors = ButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    disabledContentColor = MaterialTheme.colorScheme.errorContainer,
-                    disabledContainerColor = MaterialTheme.colorScheme.errorContainer
-                ),
+                colors = md_theme_light_button_primary,
                 modifier = Modifier
                     .size(
                         width = 220.dp,

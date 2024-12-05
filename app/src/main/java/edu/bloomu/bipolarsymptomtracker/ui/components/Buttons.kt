@@ -38,8 +38,8 @@ import edu.bloomu.bipolarsymptomtracker.model.Symptoms
 import edu.bloomu.bipolarsymptomtracker.nav.NavigationItem
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Painters
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Units
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_dark
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_light
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_secondary_pressed
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_secondary
 import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_card_alt_dark
 import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_card_alt_light
 import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_primary
@@ -214,14 +214,14 @@ fun NavButton(
     val configuration = LocalConfiguration.current
     val buttonWidth = ((configuration.screenWidthDp.dp) / 5) * 2
 
-    var buttonColors by remember { mutableStateOf(if (initiallySelected) md_theme_light_button_dark else md_theme_light_button_light) }
+    var buttonColors by remember { mutableStateOf(if (initiallySelected) md_theme_light_button_secondary_pressed else md_theme_light_button_secondary) }
 
     val select = {
-        buttonColors = md_theme_light_button_dark
+        buttonColors = md_theme_light_button_secondary_pressed
     }
 
     val unselect = {
-        buttonColors = md_theme_light_button_light
+        buttonColors = md_theme_light_button_secondary
     }
 
     LaunchedEffect(Unit) {

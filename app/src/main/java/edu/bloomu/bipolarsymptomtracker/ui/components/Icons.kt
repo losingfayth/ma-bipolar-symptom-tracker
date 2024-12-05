@@ -75,9 +75,9 @@ import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_unstable
     modifier: Modifier = Modifier
 ) {
     return when(state) {
-        State.MANIC -> StateAnalysisManic(modifier, color)
+        State.FULL_MANIC -> StateAnalysisManic(modifier, color)
         State.HYPO_MANIC -> StateAnalysisHypoManic(modifier, color)
-        State.DEPRESSIVE -> StateAnalysisDepressive(modifier, color)
+        State.FULL_DEPRESSIVE -> StateAnalysisDepressive(modifier, color)
         State.HYPO_DEPRESSIVE -> StateAnalysisHypoDepressive(modifier, color)
         State.NEUTRAL -> StateAnalysisNeutral(modifier, color)
         State.UNKNOWN -> StateAnalysisUnknown(modifier, color)
