@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -55,9 +56,13 @@ fun SettingsScreen(
     var cycleLength by remember {
         mutableIntStateOf(sharedPreferences.getInt(Strings.SharedPrefKeys.CycleLength, 0))
     }
+
+    val entries by viewModel.entries.collectAsState()
+
     var showConfirmDialog by remember { mutableStateOf(false) }
     var showClearSuccessDialog by remember { mutableStateOf(false) }
     var showSaveSuccessDialog by remember { mutableStateOf(false) }
+    var entriesIsNotEmpty by remember { mutableStateOf(entries.isEmpty()) }
 
     LaunchedEffect(Unit) {
         onFabChange {
@@ -66,6 +71,7 @@ fun SettingsScreen(
                     editor.putString(Strings.SharedPrefKeys.UserName, usersName)
                     editor.putInt(Strings.SharedPrefKeys.CycleLength, cycleLength)
                     editor.apply()
+                    showSaveSuccessDialog = true
                 }
             )
         }
@@ -119,6 +125,7 @@ fun SettingsScreen(
                         usersName = newValue
                     },
                     textStyle = MaterialTheme.typography.titleMedium,
+                    singleLine = true,
                     placeholder = {
                         Text(
                             text = Strings.WelcomeText.NameEntry,
@@ -173,33 +180,35 @@ fun SettingsScreen(
                 }
             }
         }
-        Row(
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.Center,
-            modifier = modifier
-                .padding(
-                    vertical = 64.dp
-                )
-        ) {
-            Button(
-                onClick = {
-                    showConfirmDialog = true
-                    onClick()
-                },
-                colors = md_theme_light_button_error,
-                shape = RoundedCornerShape(
-                    size = 8.dp
-                ),
-                modifier = Modifier
-                    .size(
-                        width = 300.dp,
-                        height = 88.dp
+        if (entriesIsNotEmpty) {
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.Center,
+                modifier = modifier
+                    .padding(
+                        vertical = 64.dp
                     )
             ) {
-                Text(
-                    text = Strings.Settings.ClearEntries,
-                    style = MaterialTheme.typography.headlineSmall
-                )
+                Button(
+                    onClick = {
+                        showConfirmDialog = true
+                        onClick()
+                    },
+                    colors = md_theme_light_button_error,
+                    shape = RoundedCornerShape(
+                        size = 8.dp
+                    ),
+                    modifier = Modifier
+                        .size(
+                            width = 300.dp,
+                            height = 88.dp
+                        )
+                ) {
+                    Text(
+                        text = Strings.Settings.ClearEntries,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
             }
         }
 
@@ -207,6 +216,8 @@ fun SettingsScreen(
             isVisible = showConfirmDialog,
             onConfirm = {
                 viewModel.clearEntries()
+                showClearSuccessDialog = true
+                entriesIsNotEmpty = false
                 showConfirmDialog = false
             },
             onCancel = {
@@ -224,8 +235,8 @@ fun SettingsScreen(
         )
 
         SuccessDialog(
-            isVisible = showClearSuccessDialog,
-            onConfirm = { showClearSuccessDialog = false },
+            isVisible = showSaveSuccessDialog,
+            onConfirm = { showSaveSuccessDialog = false },
             confirmText = Strings.Settings.SuccessDialog.SaveSettings.Title,
             bodyText = Strings.Settings.SuccessDialog.SaveSettings.Body
         )

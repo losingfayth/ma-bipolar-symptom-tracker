@@ -262,7 +262,7 @@ fun Analysis(
                         style = MaterialTheme.typography.headlineSmall.toSpanStyle().copy(
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
-                    ) { append(if (currentAnalysis.streakLength > 1) Strings.AnalysisScreenText.CycleLengthSuffix else " day") }
+                    ) { append(if (currentAnalysis.streakLength != 1) Strings.AnalysisScreenText.CycleLengthSuffix else " day") }
                 }
             )
         }

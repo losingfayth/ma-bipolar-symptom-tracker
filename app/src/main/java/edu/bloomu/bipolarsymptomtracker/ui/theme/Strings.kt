@@ -165,12 +165,14 @@ object Strings {
         }
         object SuccessDialog {
             object SaveSettings {
-                val Title = "Settings save"
-                val Body = "Settings have been save successfully"
+                val Title = "Settings saved"
+                val Body = "Settings have been saved successfully"
+                val Button = "Okay"
             }
             object ClearEntries {
                 val Title = "Entries cleared"
                 val Body = "Entries have been cleared successfully"
+                val Button = "Okay"
             }
         }
     }

@@ -58,21 +58,22 @@ fun SuccessDialog(
                     )
                 }
             },
-            confirmButton = {
+            confirmButton = {},
+            dismissButton = {
                 Button(
                     onClick = { onConfirm() },
                     colors = md_theme_light_button_light
                 ) {
                     Text(
-                        text = Strings.Settings.ConfirmClearDialog.ConfirmText,
+                        text = Strings.Settings.SuccessDialog.SaveSettings.Button,
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
             },
             modifier = Modifier
                 .size(
-                    width = 400.dp,
-                    height = 300.dp
+                    width = 600.dp,
+                    height = 360.dp
                 )
         )
     }
