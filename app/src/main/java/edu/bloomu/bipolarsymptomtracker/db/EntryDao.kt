@@ -21,5 +21,5 @@ interface EntryDao {
     suspend fun getAll(): List<Entry>
 
     @Delete
-    fun delete(entry: Entry)
+    suspend fun delete(entry: Entry)
 }

@@ -1,8 +1,10 @@
 package edu.bloomu.bipolarsymptomtracker.ui.components
 
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,35 +12,37 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import edu.bloomu.bipolarsymptomtracker.R
 import edu.bloomu.bipolarsymptomtracker.db.Entry
 import edu.bloomu.bipolarsymptomtracker.db.EntryViewModel
 import edu.bloomu.bipolarsymptomtracker.model.Mood
 import edu.bloomu.bipolarsymptomtracker.model.Symptoms
 import edu.bloomu.bipolarsymptomtracker.nav.NavigationItem
-import edu.bloomu.bipolarsymptomtracker.ui.theme.Icons
+import edu.bloomu.bipolarsymptomtracker.ui.theme.Painters
+import edu.bloomu.bipolarsymptomtracker.ui.theme.Units
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_dark
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_light
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_card_alt_dark
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_card_alt_light
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_primary
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -55,23 +59,58 @@ fun SwitchButton(
     var selected by remember { mutableStateOf(initiallySelected) }
 
     BasicCard(
+        elevation = CardDefaults.cardElevation(0.dp),
+        colors = if (selected) md_theme_light_card_alt_dark else md_theme_light_card_alt_light,
+        border = BorderStroke(8.dp, md_theme_light_primary),
         modifier = modifier
-            .clickable { onClick(); selected = !selected }
+            .clickable {
+                onClick()
+                selected = !selected
+            }
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
-        Row() {
-            content()
-            Switch(
-                checked = selected,
-                onCheckedChange = { }
-            )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(
+                        horizontal = 8.dp
+                    )
+            ) {
+                content()
+            }
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(
+                        horizontal = 8.dp
+                    )
+            ) {
+                Switch(
+                    checked = selected,
+                    onCheckedChange = {
+                        selected = it // Update the state when toggled
+                        onClick()
+                    },
+                    modifier = Modifier
+                )
+            }
         }
     }
 }
 
 @Composable
-fun SwitchButton(
+fun TextSwitchButton(
     onClick: () -> Unit,
     text: String,
     initiallySelected: Boolean = false,
@@ -85,47 +124,11 @@ fun SwitchButton(
             Text(
                 text = text,
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.primary
+                modifier = Modifier
+                    .padding(end = 8.dp)
             )
         }
     )
-}
-
-@Composable
-fun ArrowButton(
-    onClick: () -> Unit,
-    painter: Painter
-) {
-    IconButton(
-        onClick = onClick,
-        modifier = Modifier
-            .border(1.dp, MaterialTheme.colorScheme.primary, shape = CircleShape)
-    ) {
-        Icon(
-            painter = painter,
-            contentDescription = "",
-            modifier = Modifier
-                .size(24.dp)
-        )
-    }
-}
-
-
-@Composable
-fun SmallFabDefault(
-    onClick: () -> Unit,
-    icon: Int,
-    desc: String,
-    modifier: Modifier
-) {
-    SmallFloatingActionButton(
-        onClick = { onClick() },
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.secondary,
-        modifier = modifier
-    ) {
-        Icon(painterResource(id = icon), desc)
-    }
 }
 
 @Composable
@@ -143,7 +146,14 @@ fun LargeFabDefault(
     ) {
         Icon(
             painter = icon,
-            contentDescription = desc
+            contentDescription = desc,
+            Modifier
+                .size(
+                    size = Units.Scaffold.Fab.Size
+                )
+                .padding(
+                    all = Units.Scaffold.Fab.Padding
+                )
         )
     }
 }
@@ -155,21 +165,7 @@ fun SaveFab(
 ) {
     LargeFabDefault(
         onClick = { onClick() },
-        icon = Icons.Outlined.Save,
-        desc = "Save",
-        modifier = modifier
-    )
-}
-
-@Composable
-fun SaveEntryFab(
-    onClick: (function: () -> Unit) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val saveEntry: (() -> Unit)? = null
-    LargeFabDefault(
-        onClick = { saveEntry?.invoke() },
-        icon = Icons.Outlined.Save,
+        icon = Painters.Outlined.Save,
         desc = "Save",
         modifier = modifier
     )
@@ -181,14 +177,13 @@ fun NewEntryFab(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     LargeFabDefault(
         onClick = {
             CoroutineScope(Dispatchers.Main).launch {
                 viewModel.insertEntry(
                     Entry(
                         date = LocalDateTime.now().toString(),
-                        symptoms = Symptoms(context),
+                        symptoms = Symptoms(),
                         mood = Mood()
                     )
                 )
@@ -201,21 +196,8 @@ fun NewEntryFab(
                 }
             }
         },
-        icon = Icons.Outlined.New,
+        icon = Painters.Outlined.New,
         desc = "",
-        modifier = modifier
-    )
-}
-
-@Composable
-fun CancelFab(
-    onClick: () -> Unit,
-    modifier: Modifier
-) {
-    SmallFabDefault(
-        onClick = { onClick() },
-        icon = R.drawable.close_24px,
-        desc = "Cancel",
         modifier = modifier
     )
 }
@@ -225,54 +207,51 @@ fun NavButton(
     onClick: () -> Unit,
     icon: Painter,
     text: String,
-    selected: Boolean = false
+    initiallySelected: Boolean = false,
+    onSelect: (() -> Unit) -> Unit = {},
+    onUnselect: (() -> Unit) -> Unit = {}
 ) {
     val configuration = LocalConfiguration.current
-    val buttonWidth = (configuration.screenWidthDp.dp) / 3
+    val buttonWidth = ((configuration.screenWidthDp.dp) / 5) * 2
 
-    //var selected by remember { mutableStateOf(selected) }
+    var buttonColors by remember { mutableStateOf(if (initiallySelected) md_theme_light_button_dark else md_theme_light_button_light) }
 
-    val themeContainerColor = MaterialTheme.colorScheme.primaryContainer
-    val themeOnContainerColor = MaterialTheme.colorScheme.onPrimaryContainer
+    val select = {
+        buttonColors = md_theme_light_button_dark
+    }
 
-    var containerColor by remember { mutableStateOf(if (selected) themeOnContainerColor else themeContainerColor) }
-    var onContainerColor by remember { mutableStateOf(if (selected) themeContainerColor else themeOnContainerColor) }
+    val unselect = {
+        buttonColors = md_theme_light_button_light
+    }
+
+    LaunchedEffect(Unit) {
+        onSelect(select)
+        onUnselect(unselect)
+    }
 
     Button(
-        onClick = {
-            onClick()
-
-            if (selected) {
-                containerColor = themeOnContainerColor
-                onContainerColor = themeContainerColor
-            } else {
-                containerColor = themeContainerColor
-                onContainerColor = themeOnContainerColor
-            }
-        },
+        onClick = onClick,
         modifier = Modifier
             .width(buttonWidth)
-            .padding(horizontal = 16.dp, vertical = 0.dp)
+            .padding(
+                horizontal = Units.Scaffold.NavButton.Button.PaddingHorizontal
+            )
             .fillMaxHeight()
         ,
-        colors = ButtonDefaults.buttonColors(containerColor = containerColor)
+        colors = buttonColors
     ) {
         Icon(
             painter = icon,
             contentDescription = null,
-            tint = onContainerColor,
             modifier = Modifier
-                .padding(
-                    end = 8.dp
-                )
         )
         Text(
             text = text,
             style = MaterialTheme.typography.titleLarge,
-            color = onContainerColor,
             modifier = Modifier
                 .padding(
-                    horizontal = 8.dp
+                    horizontal = Units.Scaffold.NavButton.Text.PaddingHorizontal,
+                    vertical = Units.Scaffold.NavButton.Text.PaddingVertical
                 )
         )
     }

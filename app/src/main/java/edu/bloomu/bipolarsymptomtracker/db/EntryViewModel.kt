@@ -37,12 +37,10 @@ class EntryViewModel(private val repository: EntryRepository) : ViewModel() {
     }
 
     fun clearEntries() {
-        viewModelScope.launch {
-            entries.value.forEach { entry ->
-                deleteEntry(entry)
-            }
-            loadAllEntries()
+        entries.value.forEach { entry ->
+            deleteEntry(entry)
         }
+        loadAllEntries()
     }
 
     fun getEntryById(id: Int): Entry? {

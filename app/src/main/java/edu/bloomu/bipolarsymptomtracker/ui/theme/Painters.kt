@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import edu.bloomu.bipolarsymptomtracker.R
 
-object Icons {
+object Painters {
     object Outlined {
         val Home: Painter
             @Composable get() = painterResource(id = R.drawable.ic_home)
@@ -71,5 +71,11 @@ object Icons {
             @Composable get() = painterResource(id = R.drawable.ic_sentiment_dissatisfied_filled)
         val AnalysisNone: Painter
             @Composable get() = painterResource(id = R.drawable.ic_sentiment_content_filled)
+        val ErrorFace: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_sentiment_stressed_filled)
+        val CasualArrow: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_switch_access_shortcut)
+        val Alert: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_error)
     }
 }

@@ -21,14 +21,14 @@ data class Entry(
     @get:Ignore
     val analysis: State
         get() {
-            val maniaCount = symptoms.li.count { it.getIndicates() == State.MANIC } +
+            val maniaCount = symptoms.li.count { it.getState() == State.MANIC } +
                     when {
                         mood.getMood(MoodLevel.VERY_HIGH) -> 2
                         mood.getMood(MoodLevel.HIGH) -> 1
                         else -> 0
                     }
 
-            val depressiveCount = symptoms.li.count { it.getIndicates() == State.DEPRESSIVE } +
+            val depressiveCount = symptoms.li.count { it.getState() == State.DEPRESSIVE } +
                     when {
                         mood.getMood(MoodLevel.VERY_LOW) -> 2
                         mood.getMood(MoodLevel.LOW) -> 1

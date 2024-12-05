@@ -1,11 +1,11 @@
 package edu.bloomu.bipolarsymptomtracker.db
 
 import androidx.room.TypeConverter
-import edu.bloomu.bipolarsymptomtracker.model.Symptoms
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import edu.bloomu.bipolarsymptomtracker.model.Mood
 import edu.bloomu.bipolarsymptomtracker.model.Symptom
+import edu.bloomu.bipolarsymptomtracker.model.Symptoms
 
 class Converters {
     @TypeConverter
@@ -14,10 +14,10 @@ class Converters {
     }
 
     @TypeConverter
-    fun toSymptomsObject(value: String?): Symptoms {
+    fun toSymptomsObject(value: String?): Symptoms? {
         val listType = object : TypeToken<Array<Symptom>>() {}.type
         val li: Array<Symptom>? = value?.let { Gson().fromJson(it, listType) }
-        return Symptoms(li)
+        return li?.let { Symptoms(it) }
     }
 
     @TypeConverter

@@ -1,6 +1,7 @@
 package edu.bloomu.bipolarsymptomtracker.ui
 
 import android.content.Context
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,17 +11,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.buildAnnotatedString
@@ -29,16 +32,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.bloomu.bipolarsymptomtracker.db.EntryViewModel
+import edu.bloomu.bipolarsymptomtracker.model.MonthlyAnalysis
 import edu.bloomu.bipolarsymptomtracker.model.State
-import edu.bloomu.bipolarsymptomtracker.model.StateAnalysis
 import edu.bloomu.bipolarsymptomtracker.model.StateStatus
 import edu.bloomu.bipolarsymptomtracker.ui.components.NewEntryFab
-import edu.bloomu.bipolarsymptomtracker.ui.theme.AppText
-import edu.bloomu.bipolarsymptomtracker.ui.theme.Icons
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_depression
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_mania
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_neutrality
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_unstable
+import edu.bloomu.bipolarsymptomtracker.ui.components.StateAnalysisIcon
+import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_depressed
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_manic
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_none
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_unstable
 
 @Composable
 fun Analysis(
@@ -55,6 +58,18 @@ fun Analysis(
         }
     }
 
+    val context = LocalContext.current
+    val sharedPreferences = remember {
+        context.getSharedPreferences(Strings.SharedPrefKeys.SharedPreferences, Context.MODE_PRIVATE)
+    }
+
+    val usersName by remember {
+        mutableStateOf(sharedPreferences.getString(Strings.SharedPrefKeys.UserName, ""))
+    }
+    var cycleLength by remember {
+        mutableIntStateOf(sharedPreferences.getInt(Strings.SharedPrefKeys.CycleLength, 0))
+    }
+
     val entries by viewModel.entries.collectAsState()
 
     val recentStates: MutableList<State> = mutableListOf()
@@ -69,84 +84,66 @@ fun Analysis(
         entries = recentStates
     )
 
-    val testMe = currentAnalysis.streakLength.toString()
-
     val analysisColor: Color
-    val analysisPainter: Painter
-    val analysisImageDesc: String
     val analysisTitle: String
     val analysisDesc: String
-    val analysisHint: String?
     val analysisBody: String
+
+    val configuration = LocalConfiguration.current
+    val iconSize = (configuration.screenWidthDp / 5) * 2
 
     when (currentAnalysis.stateAnalysis) {
         State.MANIC -> {
-            analysisColor = md_theme_light_mania
-            analysisPainter = Icons.Filled.AnalysisManic
-            analysisTitle = AppText.StateText.Manic.Title
-            analysisDesc = AppText.StateText.Manic.Desc
-            analysisImageDesc = AppText.StateText.Manic.ImageDesc
-            analysisBody = AppText.StateText.Manic.Body
+            analysisColor = md_theme_light_state_manic
+            analysisTitle = Strings.StateText.Manic.Title
+            analysisDesc = Strings.StateText.Manic.Desc
+            analysisBody = Strings.StateText.Manic.Body
         }
         State.HYPO_MANIC -> {
-            analysisColor = md_theme_light_mania
-            analysisPainter = Icons.Filled.AnalysisHypoManic
-            analysisTitle = AppText.StateText.HypoManic.Title
-            analysisDesc = AppText.StateText.HypoManic.Desc
-            analysisImageDesc = AppText.StateText.HypoManic.ImageDesc
-            analysisBody = AppText.StateText.HypoManic.Body
+            analysisColor = md_theme_light_state_manic
+            analysisTitle = Strings.StateText.HypoManic.Title
+            analysisDesc = Strings.StateText.HypoManic.Desc
+            analysisBody = Strings.StateText.HypoManic.Body
         }
         State.DEPRESSIVE -> {
-            analysisColor = md_theme_light_depression
-            analysisPainter = Icons.Filled.AnalysisDepressive
-            analysisTitle = AppText.StateText.Depressed.Title
-            analysisDesc = AppText.StateText.Depressed.Desc
-            analysisImageDesc = AppText.StateText.Depressed.ImageDesc
-            analysisBody = AppText.StateText.Depressed.Body
+            analysisColor = md_theme_light_state_depressed
+            analysisTitle = Strings.StateText.Depressed.Title
+            analysisDesc = Strings.StateText.Depressed.Desc
+            analysisBody = Strings.StateText.Depressed.Body
         }
         State.HYPO_DEPRESSIVE -> {
-            analysisColor = md_theme_light_depression
-            analysisPainter = Icons.Filled.AnalysisHypoDepressive
-            analysisTitle = AppText.StateText.HypoDepressed.Title
-            analysisDesc = AppText.StateText.HypoDepressed.Desc
-            analysisImageDesc = AppText.StateText.HypoDepressed.ImageDesc
-            analysisBody = AppText.StateText.HypoDepressed.Body
+            analysisColor = md_theme_light_state_depressed
+            analysisTitle = Strings.StateText.HypoDepressed.Title
+            analysisDesc = Strings.StateText.HypoDepressed.Desc
+            analysisBody = Strings.StateText.HypoDepressed.Body
         }
         State.NEUTRAL -> {
-            analysisColor = md_theme_light_neutrality
-            analysisPainter = Icons.Filled.AnalysisNone
-            analysisTitle = AppText.StateText.Neutral.Title
-            analysisDesc = AppText.StateText.Neutral.Desc
-            analysisImageDesc = AppText.StateText.Neutral.ImageDesc
-            analysisBody = AppText.StateText.Neutral.Body
+            analysisColor = md_theme_light_state_none
+            analysisTitle = Strings.StateText.Neutral.Title
+            analysisDesc = Strings.StateText.Neutral.Desc
+            analysisBody = Strings.StateText.Neutral.Body
         }
         State.UNKNOWN -> {
-            analysisColor = md_theme_light_neutrality
-            analysisPainter = Icons.Filled.AnalysisNone
-            analysisTitle = AppText.StateText.Unknown.Title
-            analysisDesc = AppText.StateText.Unknown.Desc
-            analysisImageDesc = AppText.StateText.Unknown.ImageDesc
-            analysisBody = AppText.StateText.Unknown.Body
+            analysisColor = md_theme_light_state_none
+            analysisTitle = Strings.StateText.Unknown.Title
+            analysisDesc = Strings.StateText.Unknown.Desc
+            analysisBody = Strings.StateText.Unknown.Body
         }
         State.UNSTABLE -> {
-            analysisColor = md_theme_light_unstable
-            analysisPainter = Icons.Filled.AnalysisUnstable
-            analysisTitle = AppText.StateText.Unstable.Title
-            analysisDesc = AppText.StateText.Unstable.Desc
-            analysisImageDesc = AppText.StateText.Unstable.ImageDesc
-            analysisBody = AppText.StateText.Unstable.Body
+            analysisColor = md_theme_light_state_unstable
+            analysisTitle = Strings.StateText.Unstable.Title
+            analysisDesc = Strings.StateText.Unstable.Desc
+            analysisBody = Strings.StateText.Unstable.Body
         }
     }
 
     val rowModifier = Modifier
         .wrapContentHeight()
         .fillMaxWidth()
-
-    // Sections
-    // 1. Hello, user!
-    // 2. Entry map
-    // 3. Analysis
-    // 4. What to do
+        .padding(
+            horizontal = 36.dp,
+            vertical = 8.dp
+        )
 
     Column(
         modifier = Modifier
@@ -156,59 +153,135 @@ fun Analysis(
             .verticalScroll(rememberScrollState())
     ) {
         Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = rowModifier
-        ) {
-            Text("Howdy, user!")
-        }
-        Row(
-            modifier = rowModifier
-                .align(Alignment.CenterHorizontally)
-        ) {
-            val configuration = LocalConfiguration.current
-            val iconSize = (configuration.screenWidthDp.dp / 3) * 2
-
-            Icon(
-                painter = analysisPainter,
-                contentDescription = analysisImageDesc,
-                tint = analysisColor,
-                modifier = Modifier
-                    .size(iconSize)
-                    .padding(36.dp)
-            )
-        }
-        Row(
-
+                .padding(
+                    horizontal = 32.dp,
+                    vertical = 0.dp
+                )
         ) {
             Text(
                 text = buildAnnotatedString {
                     withStyle(
-                        style = MaterialTheme.typography.displaySmall.toSpanStyle()
-                    ) { append("Looks like you're currently in an ") }
+                        style = MaterialTheme.typography.displayMedium.toSpanStyle()
+                            .copy(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                    ) { append(Strings.AnalysisScreenText.Greeting)}
                     withStyle(
-                        style = MaterialTheme.typography.displayMedium.toSpanStyle().copy(
-                            color = analysisColor,
-                            fontWeight = FontWeight.ExtraBold)
-                    ) { append(analysisTitle) }
+                        style = MaterialTheme.typography.displayLarge.toSpanStyle()
+                            .copy(
+                                color = MaterialTheme.colorScheme.tertiary,
+                            )
+                    ) { append("  " + usersName + "  ")}
                     withStyle(
-                        style = MaterialTheme.typography.displaySmall.toSpanStyle()
-                    ) { append(" state") }
+                        style = MaterialTheme.typography.displayMedium.toSpanStyle()
+                            .copy(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            )
+                    ) { append(" !")}
                 }
             )
         }
         Row(
-
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = rowModifier
         ) {
-            Text(
-                text = analysisDesc,
-                style = MaterialTheme.typography.headlineLarge
+            StateAnalysisIcon(
+                state = currentAnalysis.stateAnalysis,
+                modifier = Modifier
+                    .size(iconSize.dp)
+                    .padding(0.dp)
             )
         }
         Row(
-
+            modifier = rowModifier
+                .padding()
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = MaterialTheme.typography.headlineLarge.toSpanStyle().copy(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    ) { append(Strings.AnalysisScreenText.YourState) }
+                    withStyle(
+                        style = MaterialTheme.typography.displayMedium.toSpanStyle().copy(
+                            color = analysisColor,
+                            fontWeight = FontWeight.ExtraBold)
+                    ) { append(" " + analysisTitle) }
+                }
+            )
+        }
+        Row(
+            modifier = rowModifier
+                .padding()
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = MaterialTheme.typography.headlineSmall.toSpanStyle().copy(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    ) { append(Strings.AnalysisScreenText.CyclePositionPrefix) }
+                    withStyle(
+                        style = MaterialTheme.typography.headlineMedium.toSpanStyle().copy(
+                            color = analysisColor,
+                            fontWeight = FontWeight.ExtraBold)
+                    ) { append(currentAnalysis.stateStatus.toString()) }
+                    withStyle(
+                        style = MaterialTheme.typography.headlineSmall.toSpanStyle().copy(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    ) { append(Strings.AnalysisScreenText.CyclePositionSuffix) }
+                }
+            )
+        }
+        Row(
+            modifier = rowModifier
+                .padding()
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = MaterialTheme.typography.headlineSmall.toSpanStyle().copy(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    ) { append(Strings.AnalysisScreenText.CycleLengthPrefix) }
+                    withStyle(
+                        style = MaterialTheme.typography.headlineMedium.toSpanStyle().copy(
+                            color = analysisColor,
+                            fontWeight = FontWeight.ExtraBold)
+                    ) { append(" " + currentAnalysis.streakLength + " ") }
+                    withStyle(
+                        style = MaterialTheme.typography.headlineSmall.toSpanStyle().copy(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    ) { append(if (currentAnalysis.streakLength > 1) Strings.AnalysisScreenText.CycleLengthSuffix else " day") }
+                }
+            )
+        }
+        Row(
+            modifier = rowModifier
+                .padding(horizontal = 36.dp, vertical = 16.dp)
+        ) {
+            Text(
+                text = analysisDesc,
+                style = MaterialTheme.typography.headlineMedium
+            )
+        }
+        Row(
+            modifier = rowModifier
+                .padding(horizontal = 36.dp)
         ) {
             Text(
                 text = analysisBody,
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineSmall
             )
         }
     }
@@ -218,8 +291,8 @@ fun Analysis(
 fun analyze(
     context: Context,
     entries: List<State>
-) : StateAnalysis {
-    if (entries.isEmpty()) return StateAnalysis()
+) : MonthlyAnalysis {
+    if (entries.isEmpty()) return MonthlyAnalysis()
     val cycleLength = 14
     //getCycleLength(context)
 
@@ -336,7 +409,7 @@ fun analyze(
 
     //if (recentStates.size >= 21) updateCycleLength(averageStreakLength, context)
 
-    return StateAnalysis(
+    return MonthlyAnalysis(
         streakLength = currentStreakLength,
         stateAnalysis = stateAnalysis,
         stateStatus = cyclePosition

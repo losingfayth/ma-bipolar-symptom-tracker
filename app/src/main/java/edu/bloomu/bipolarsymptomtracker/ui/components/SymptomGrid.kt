@@ -33,7 +33,8 @@ fun SymptomList(
         items(count = symptoms.li.size) { i ->
             val symptom = symptoms.li[i]
 
-            SymptomCard(symptom,
+            SymptomCard(
+                symptom = symptom,
                 modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight()

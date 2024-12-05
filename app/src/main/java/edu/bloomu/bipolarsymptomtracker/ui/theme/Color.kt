@@ -1,5 +1,8 @@
 package edu.bloomu.bipolarsymptomtracker.ui.theme
 
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -19,7 +22,7 @@ val md_theme_light_onPrimaryContainer = Color(0xFF21005D)
 // Secondary colors
 val md_theme_light_secondary = Color(0xFF625B71)
 val md_theme_light_onSecondary = Color(0xFFFFFFFF)
-val md_theme_light_secondaryContainer = Color(0xFFE8DEF8)
+val md_theme_light_secondaryContainer = Color(0xFFD1C4E9)
 val md_theme_light_onSecondaryContainer = Color(0xFF1D192B)
 
 // Tertiary colors
@@ -57,7 +60,72 @@ val md_theme_light_neutral = Color(0xFFB0BEC5)
 val md_theme_light_accent = Color(0xFF64B5F6)
 
 // Emotional State Highlight Colors
-val md_theme_light_mania = Color(0xFFFF5722) // Bright orange-red to indicate high energy
-val md_theme_light_depression = Color(0xFF304FFE) // Deep blue to indicate calm/low energy
-val md_theme_light_unstable = Color(0xFFFFC400) // Bright amber to signal caution or instability
-val md_theme_light_neutrality = Color(0xFF9E9E9E) // Neutral gray for balanced emotions
+val md_theme_light_state_manic = Color(0xFFF51744)
+val md_theme_light_state_hypo_manic = Color(0xFFF15074)
+val md_theme_light_state_depressed = Color(0xFF455DFC)
+val md_theme_light_state_hypo_depressed = Color(0xFF6678FA)
+val md_theme_light_state_unstable = Color(0xFF749436)
+val md_theme_light_state_none = Color(0xFF9E9E9E)
+
+val md_theme_light_button_error = ButtonColors(
+    containerColor = md_theme_light_error,
+    contentColor = md_theme_light_onError,
+    disabledContainerColor = md_theme_light_errorContainer,
+    disabledContentColor = md_theme_light_onErrorContainer
+)
+
+val md_theme_light_button_light = ButtonColors(
+    containerColor = md_theme_light_secondaryContainer,
+    contentColor = md_theme_light_onSecondaryContainer,
+    disabledContainerColor = md_theme_light_errorContainer,
+    disabledContentColor = md_theme_light_onErrorContainer
+)
+
+val md_theme_light_button_dark = ButtonColors(
+    contentColor = md_theme_light_secondaryContainer,
+    containerColor = md_theme_light_onSecondaryContainer,
+    disabledContainerColor = md_theme_light_onErrorContainer,
+    disabledContentColor = md_theme_light_errorContainer
+)
+
+val md_theme_light_card_dark = CardColors(
+    contentColor = md_theme_light_primaryContainer,
+    containerColor = md_theme_light_onPrimaryContainer,
+    disabledContainerColor = md_theme_light_onErrorContainer,
+    disabledContentColor = md_theme_light_errorContainer
+)
+
+val md_theme_light_card_light = CardColors(
+    contentColor = md_theme_light_onPrimaryContainer,
+    containerColor = md_theme_light_primaryContainer,
+    disabledContainerColor = md_theme_light_onErrorContainer,
+    disabledContentColor = md_theme_light_errorContainer
+)
+
+val md_theme_light_card_alt_light = CardColors(
+    contentColor = md_theme_light_onPrimary,
+    containerColor = md_theme_light_primary,
+    disabledContainerColor = md_theme_light_onErrorContainer,
+    disabledContentColor = md_theme_light_errorContainer
+)
+
+val md_theme_light_card_alt_dark = CardColors(
+    containerColor = md_theme_light_onPrimary,
+    contentColor = md_theme_light_primary,
+    disabledContainerColor = md_theme_light_onErrorContainer,
+    disabledContentColor = md_theme_light_errorContainer
+)
+
+val md_theme_light_icon_button_light = IconButtonColors(
+    containerColor = md_theme_light_secondaryContainer,
+    contentColor = md_theme_light_onSecondaryContainer,
+    disabledContainerColor = md_theme_light_errorContainer,
+    disabledContentColor = md_theme_light_onErrorContainer
+)
+
+val md_theme_light_icon_button_dark = IconButtonColors(
+    contentColor = md_theme_light_secondaryContainer,
+    containerColor = md_theme_light_onSecondaryContainer,
+    disabledContainerColor = md_theme_light_onErrorContainer,
+    disabledContentColor = md_theme_light_errorContainer
+)

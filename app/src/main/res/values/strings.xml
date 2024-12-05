@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BipolarSymptomTracker</string>
+    <string name="app_name">biPerfect</string>
 
     <string name="md_ref_symptom_mania_temper_title">Irritable or short tempered</string>
     <string name="md_ref_symptom_mania_energy_title">Very energetic</string>

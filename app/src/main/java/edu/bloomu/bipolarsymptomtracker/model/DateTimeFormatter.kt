@@ -16,7 +16,7 @@ fun formatTime(
     dateString: String
 ): String? {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
     val parsedTime = inputFormat.parse(dateString)
     return parsedTime?.let { outputFormat.format(it) }
 }
