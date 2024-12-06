@@ -10,11 +10,7 @@ class EntryViewModel(private val repository: EntryRepository) : ViewModel() {
     private val _entries = MutableStateFlow<List<Entry>>(emptyList())
     val entries: StateFlow<List<Entry>> = _entries
 
-    init {
-        viewModelScope.launch {
-            loadAllEntries()
-        }
-    }
+    init { viewModelScope.launch { loadAllEntries() } }
 
     fun insertEntry(entry: Entry) {
         viewModelScope.launch {
@@ -23,7 +19,7 @@ class EntryViewModel(private val repository: EntryRepository) : ViewModel() {
         }
     }
 
-    fun loadAllEntries() {
+    private fun loadAllEntries() {
         viewModelScope.launch {
             _entries.value = repository.getAllEntries()
         }
@@ -37,21 +33,13 @@ class EntryViewModel(private val repository: EntryRepository) : ViewModel() {
     }
 
     fun clearEntries() {
-        entries.value.forEach { entry ->
-            deleteEntry(entry)
-        }
+        entries.value.forEach { entry -> deleteEntry(entry) }
         loadAllEntries()
     }
 
-    fun getEntryById(id: Int): Entry? {
-        return entries.value.find { it.id == id }
-    }
+    fun getEntryById(id: Int): Entry? { return entries.value.find { it.id == id } }
 
-    fun getFirstEntry(): Entry {
-        return entries.value.first()
-    }
+    fun getFirstEntry(): Entry { return entries.value.first() }
 
-    fun getLastEntry(): Entry {
-        return entries.value.last()
-    }
+    fun getLastEntry(): Entry { return entries.value.last() }
 }

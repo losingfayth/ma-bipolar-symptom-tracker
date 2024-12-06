@@ -13,6 +13,12 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import edu.bloomu.bipolarsymptomtracker.model.Symptoms
 
+/**
+ * A list (grid) of Symptom cards for use on Edit Entry screen
+ *
+ * @param symptoms The Symptoms (list of Symptom objects) to display
+ * @param modifier Formatting
+ */
 @Composable
 fun SymptomList(
     symptoms: Symptoms,

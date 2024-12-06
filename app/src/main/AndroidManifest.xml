@@ -13,24 +13,10 @@
         android:theme="@style/Theme.BipolarSymptomTracker"
         tools:targetApi="31">
         <activity
-            android:name=".ui.ViewEntriesActivity"
-            android:exported="false"
-            android:label="@string/title_activity_view_entries"
-            android:theme="@style/Theme.BipolarSymptomTracker" />
-        <activity
-            android:name=".ui.SetupActivity"
-            android:exported="false"
-            android:label="@string/title_activity_setup"
-            android:theme="@style/Theme.BipolarSymptomTracker" />
-        <activity
-            android:name=".ui.EntryScreenActivity"
-            android:exported="false"
-            android:label="@string/title_activity_entry_screen"
-            android:theme="@style/Theme.BipolarSymptomTracker" />
-        <activity
             android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.BipolarSymptomTracker">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

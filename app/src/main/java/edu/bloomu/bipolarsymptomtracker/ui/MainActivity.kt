@@ -44,8 +44,8 @@ import edu.bloomu.bipolarsymptomtracker.ui.theme.BipolarSymptomTrackerTheme
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Painters
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Units
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_icon_button_dark
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_icon_button_light
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_icon_button
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_icon_button_pressed
 
 /**
  * biPerfect - A Bipolar Disorder symptom tracker and analyzer
@@ -107,13 +107,13 @@ fun MainContainer(
     // User's name, cycle length are stored in shared preferences
     val context = LocalContext.current
     val sharedPreferences = remember {
-        context.getSharedPreferences(Strings.SharedPrefKeys.SharedPreferences, Context.MODE_PRIVATE)
+        context.getSharedPreferences(Strings.SharedPrefKeys.sharedPrefs, Context.MODE_PRIVATE)
     }
 
     // ...as well as whether the user has already set up the app
     var setupComplete by remember{
         mutableStateOf(
-            sharedPreferences.getBoolean(Strings.SharedPrefKeys.SetupCompleted, false)
+            sharedPreferences.getBoolean(Strings.SharedPrefKeys.setupCompleted, false)
         )
     }
 
@@ -137,7 +137,7 @@ fun MainContainer(
                                     navController.navigate(NavigationItem.Analysis.route)
                                 },
                                 icon = Painters.Outlined.Analytics,
-                                text = Strings.NavigationBar.Analysis,
+                                text = Strings.Components.Scaffold.BottomAppBar.Buttons.Analysis.name,
                                 onSelect = { method ->
                                     analysisNavSelect = method // Click the button, update colors
                                 },
@@ -153,7 +153,7 @@ fun MainContainer(
                                     navController.navigate(NavigationItem.Entries.route)
                                 },
                                 icon = Painters.Outlined.List,
-                                text = Strings.NavigationBar.Entries,
+                                text = Strings.Components.Scaffold.BottomAppBar.Buttons.Entries.name,
                                 onSelect = { method ->
                                     entriesNavSelect = method // Click the button, update colors
                                 },
@@ -215,23 +215,21 @@ fun MainContainer(
                     actions = {
                         // Settings button
                         IconButton(
-                            onClick = {
-                                navController.navigate(NavigationItem.Settings.route)
-                            },
+                            onClick = { navController.navigate(NavigationItem.Settings.route) },
                             colors =
-                                if (inSettings) md_theme_light_icon_button_dark
-                                else md_theme_light_icon_button_light,
+                                if (inSettings) md_theme_icon_button_pressed
+                                else md_theme_icon_button,
                             modifier = Modifier
                                 .padding(
                                     vertical = 8.dp,
                                     horizontal = 12.dp
                                 )
-                                .size(Units.Icons.Large)
+                                .size(Units.Icons.Standard)
                         ) {
                             Icon(
                                 Painters.Outlined.Settings,
                                 contentDescription =
-                                    Strings.Scaffold.TopAppBar.Buttons.Settings.IconDesc
+                                    Strings.Components.Scaffold.TopAppBar.Buttons.Settings.iconAlt
                             )
                         }
                     },
@@ -259,20 +257,20 @@ fun MainContainer(
                 value -> title = value  // Child process updates the title value
 
                 // New value is used to click buttons to indicate to user what screen they're in
-                if (value == Strings.ScreenTitles.Analysis) analysisNavSelect?.invoke()
+                if (value == NavigationItem.Analysis.toString()) analysisNavSelect?.invoke()
                 else analysisNavUnselect?.invoke()
 
-                if (value == Strings.ScreenTitles.EntryScreen
-                    || value == Strings.ScreenTitles.Entries)
+                if (value == NavigationItem.Entries.toString()
+                    || value == NavigationItem.EditEntry.toString())
                     entriesNavSelect?.invoke()
                 else entriesNavUnselect?.invoke()
 
-                if (value == Strings.ScreenTitles.Settings) inSettings = true
+                if (value == NavigationItem.Settings.toString()) inSettings = true
                 else inSettings = false
             },
             // Child process provides a fab when it is launched
             onFabChange = { newFab -> fab = newFab },
-            onClick = { setupComplete = true }, // Function for welcome screen to close itself
+            onSetupCompleted = { setupComplete = true }, // Function for welcome screen to close itself
             startDestination =
                 if (setupComplete) NavigationItem.Analysis.route // Analysis screen as home screen
                 else NavigationItem.Welcome.route   // Show the welcome screen if app not setup

@@ -27,9 +27,9 @@ import edu.bloomu.bipolarsymptomtracker.model.formatTime
 import edu.bloomu.bipolarsymptomtracker.nav.NavigationItem
 import edu.bloomu.bipolarsymptomtracker.ui.components.MoodDial
 import edu.bloomu.bipolarsymptomtracker.ui.components.SaveFab
-import edu.bloomu.bipolarsymptomtracker.ui.components.StateAnalysisIcon
+import edu.bloomu.bipolarsymptomtracker.ui.components.StateIcon
 import edu.bloomu.bipolarsymptomtracker.ui.components.SymptomList
-import edu.bloomu.bipolarsymptomtracker.ui.components.TextSwitchButton
+import edu.bloomu.bipolarsymptomtracker.ui.components.TextSwitchCard
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 
 @Composable
@@ -37,22 +37,18 @@ fun EntryScreen(
     viewModel: EntryViewModel,
     navController: NavController,
     entryId: Int,
-    onFabChange: (fab: @Composable () -> Unit) -> Unit
+    onFabChange: (fab: @Composable () -> Unit) -> Unit,
+    onSave: () -> Unit = {}
 ) {
     val entry by remember { mutableStateOf(viewModel.getEntryById(entryId)) }
 
     val save = {
         if (entry != null) viewModel.insertEntry(entry!!)
         navController.navigate(NavigationItem.Entries.route)
+        onSave()
     }
 
-    LaunchedEffect(Unit) {
-        onFabChange {
-            SaveFab(
-                onClick = save
-            )
-        }
-    }
+    LaunchedEffect(Unit) { onFabChange { SaveFab(onClick = save) } }
 
     Column(
         modifier = Modifier
@@ -75,8 +71,8 @@ fun EntryScreen(
                 val date = formatDate(entry!!.date)
                 val time = formatTime(entry!!.date)
 
-                StateAnalysisIcon(
-                    entry!!.analysis,
+                StateIcon(
+                    entry!!.state,
                     color = false,
                     modifier = Modifier
                         .padding(
@@ -101,9 +97,7 @@ fun EntryScreen(
                 }
             }
             Row { // Mood
-                MoodDial(
-                    mood = entry!!.mood
-                )
+                MoodDial(moodGroup = entry!!.moodGroup)
             }
             Row { // Symptoms
                 SymptomList(
@@ -130,8 +124,8 @@ fun EntryScreen(
                         horizontal = 16.dp
                     )
             ) {
-                TextSwitchButton(
-                    text = Strings.SingleEntryScreen.MedsSwitch,
+                TextSwitchCard(
+                    text = Strings.Screens.EditEntry.medsSwitch,
                     initiallySelected = entry!!.meds,
                     onClick = { entry!!.meds = !entry!!.meds },
                     modifier = switchButtonModifier
@@ -146,8 +140,8 @@ fun EntryScreen(
                         horizontal = 16.dp
                     )
             ) {
-                TextSwitchButton(
-                    text = Strings.SingleEntryScreen.DrugSwitch,
+                TextSwitchCard(
+                    text = Strings.Screens.EditEntry.drugSwitch,
                     initiallySelected = entry!!.drugs,
                     onClick = { entry!!.drugs = !entry!!.drugs },
                     modifier = switchButtonModifier

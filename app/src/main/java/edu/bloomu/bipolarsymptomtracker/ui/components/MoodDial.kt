@@ -23,19 +23,22 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import edu.bloomu.bipolarsymptomtracker.R
-import edu.bloomu.bipolarsymptomtracker.model.Mood
+import edu.bloomu.bipolarsymptomtracker.model.MoodGroup
 import edu.bloomu.bipolarsymptomtracker.model.MoodLevel
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Painters
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_depressed
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_hypo_depressed
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_hypo_manic
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_manic
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_none
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_accent
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_state_depressed
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_state_hypo_depressed
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_state_hypo_manic
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_state_manic
 
+/**
+ * Creates an interactable group of icons for the user to log their moods
+ *
+ * @param moodGroup The Mood Group to display, for the user to interact with
+ */
 @Composable
-fun MoodDial(
-    mood: Mood
-) {
+fun MoodDial(moodGroup: MoodGroup) {
     val configuration = LocalConfiguration.current
     val iconSize = (configuration.screenWidthDp.dp) / 6
 
@@ -47,54 +50,65 @@ fun MoodDial(
             .wrapContentHeight()
             .padding(6.dp)
     ) {
+        // Element for each loggable mood
         MoodDialElement(
             Painters.Outlined.MoodVLow,
             stringResource(id = R.string.md_ref_mood_v_low_desc),
-            onClick = { mood.toggleMood(MoodLevel.VERY_LOW) },
-            initiallySelected = mood.getMood(MoodLevel.VERY_LOW),
-            moodColor = md_theme_light_state_depressed,
+            onClick = { moodGroup.toggleMood(MoodLevel.VERY_LOW) },
+            initiallySelected = moodGroup.getMood(MoodLevel.VERY_LOW),
+            moodColor = md_theme_state_depressed,
             modifier = Modifier
                 .size(iconSize)
         )
         MoodDialElement(
             Painters.Outlined.MoodLow,
             stringResource(id = R.string.md_ref_mood_low_desc),
-            onClick = { mood.toggleMood(MoodLevel.LOW) },
-            initiallySelected = mood.getMood(MoodLevel.LOW),
-            moodColor = md_theme_light_state_hypo_depressed,
+            onClick = { moodGroup.toggleMood(MoodLevel.LOW) },
+            initiallySelected = moodGroup.getMood(MoodLevel.LOW),
+            moodColor = md_theme_state_hypo_depressed,
             modifier = Modifier
                 .size(iconSize)
         )
         MoodDialElement(
             Painters.Outlined.MoodNeutral,
             stringResource(id = R.string.md_ref_mood_neutral_desc),
-            onClick = { mood.toggleMood(MoodLevel.NEUTRAL) },
-            initiallySelected = mood.getMood(MoodLevel.NEUTRAL),
-            moodColor = md_theme_light_state_none,
+            onClick = { moodGroup.toggleMood(MoodLevel.NEUTRAL) },
+            initiallySelected = moodGroup.getMood(MoodLevel.NEUTRAL),
+            moodColor = md_theme_accent,
             modifier = Modifier
                 .size(iconSize)
         )
         MoodDialElement(
             Painters.Outlined.MoodHigh,
             stringResource(id = R.string.md_ref_mood_high_desc),
-            onClick = { mood.toggleMood(MoodLevel.HIGH) },
-            initiallySelected = mood.getMood(MoodLevel.HIGH),
-            moodColor = md_theme_light_state_hypo_manic,
+            onClick = { moodGroup.toggleMood(MoodLevel.HIGH) },
+            initiallySelected = moodGroup.getMood(MoodLevel.HIGH),
+            moodColor = md_theme_state_hypo_manic,
             modifier = Modifier
                 .size(iconSize)
         )
         MoodDialElement(
             Painters.Outlined.MoodVHigh,
             stringResource(id = R.string.md_ref_mood_v_high_desc),
-            onClick = { mood.toggleMood(MoodLevel.VERY_HIGH) },
-            initiallySelected = mood.getMood(MoodLevel.VERY_HIGH),
-            moodColor = md_theme_light_state_manic,
+            onClick = { moodGroup.toggleMood(MoodLevel.VERY_HIGH) },
+            initiallySelected = moodGroup.getMood(MoodLevel.VERY_HIGH),
+            moodColor = md_theme_state_manic,
             modifier = Modifier
                 .size(iconSize)
         )
     }
 }
 
+/**
+ * An element of a Mood Dial for displaying a single mood in a Mood Group
+ *
+ * @param icon The icon associated with this mood
+ * @param desc The alt text for the icon
+ * @param initiallySelected Whether to start the element selected
+ * @param onClick Allows the parent to log when child is clicked
+ * @param moodColor The color to display the mood in
+ * @param modifier Formatting
+ */
 @Composable
 fun MoodDialElement(
     icon: Painter,

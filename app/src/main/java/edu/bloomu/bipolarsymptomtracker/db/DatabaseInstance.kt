@@ -3,6 +3,9 @@ package edu.bloomu.bipolarsymptomtracker.db
 import android.content.Context
 import androidx.room.Room
 
+/**
+ * An instance of the app's Room database
+ */
 object DatabaseInstance {
     @Volatile
     private var INSTANCE: AppDatabase? = null

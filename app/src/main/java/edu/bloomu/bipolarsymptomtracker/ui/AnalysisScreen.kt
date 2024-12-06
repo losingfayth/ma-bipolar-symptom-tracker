@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +29,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import edu.bloomu.bipolarsymptomtracker.db.Entry
 import edu.bloomu.bipolarsymptomtracker.db.EntryViewModel
 import edu.bloomu.bipolarsymptomtracker.model.Cycle
 import edu.bloomu.bipolarsymptomtracker.model.CycleAnalysis
@@ -35,7 +37,8 @@ import edu.bloomu.bipolarsymptomtracker.model.CyclePosition
 import edu.bloomu.bipolarsymptomtracker.model.State
 import edu.bloomu.bipolarsymptomtracker.ui.components.HighlightText
 import edu.bloomu.bipolarsymptomtracker.ui.components.NewEntryFab
-import edu.bloomu.bipolarsymptomtracker.ui.components.StateAnalysisIcon
+import edu.bloomu.bipolarsymptomtracker.ui.components.StateIcon
+import edu.bloomu.bipolarsymptomtracker.ui.components.SuccessDialog
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 
 @Composable
@@ -57,32 +60,33 @@ fun Analysis(
 
     val context = LocalContext.current
     val sharedPreferences = remember {
-        context.getSharedPreferences(Strings.SharedPrefKeys.SharedPreferences, Context.MODE_PRIVATE)
+        context.getSharedPreferences(Strings.SharedPrefKeys.sharedPrefs, Context.MODE_PRIVATE)
     }
 
     val usersName by remember {
-        mutableStateOf(sharedPreferences.getString(Strings.SharedPrefKeys.UserName, ""))
+        mutableStateOf(sharedPreferences.getString(Strings.SharedPrefKeys.userName, ""))
     }
     val cycleLength by remember {
-        mutableIntStateOf(sharedPreferences.getInt(Strings.SharedPrefKeys.CycleLength, 0))
+        mutableIntStateOf(sharedPreferences.getInt(Strings.SharedPrefKeys.cycleLength, 0))
     }
 
     val entries by viewModel.entries.collectAsState() // Entries from database
 
-    val recentStates: MutableList<State> = mutableListOf()
 
     // Only analyze past ~month of entries
     // (this assumes the user only makes on entry per day)
-    for (entry in entries.reversed()) {
-        recentStates.add(entry.analysis)
-        if (recentStates.size == 35) break
-    }
-
     // Use algorithm to determine user's Bipolar state
+    /*
     val currentAnalysis = analyze(
-        entries = recentStates,
+        entries = entries.takeLast(35).reversed(),
         sharedPreferences = sharedPreferences
-    )
+    )*/
+
+    val currentAnalysis by remember { mutableStateOf(analyze(entries = entries.takeLast(35).reversed(),
+        sharedPreferences = sharedPreferences))}
+
+    var displayMedWarning by remember { mutableStateOf(currentAnalysis.meds) }
+    var displayDrugWarning by remember { mutableStateOf(currentAnalysis.drugs) }
 
     val configuration = LocalConfiguration.current
     val iconSize = (configuration.screenWidthDp / 5) * 2    // Dynamic button sizing
@@ -96,6 +100,20 @@ fun Analysis(
             horizontal = 36.dp,
             vertical = 8.dp
         )
+
+    SuccessDialog(
+        title = Strings.Screens.Analysis.MedDialog.title,
+        message = Strings.Screens.Analysis.MedDialog.body,
+        isVisible = displayMedWarning,
+        onConfirm = { displayMedWarning = false }
+    )
+
+    SuccessDialog(
+        title = Strings.Screens.Analysis.DrugDialog.title,
+        message = Strings.Screens.Analysis.DrugDialog.body,
+        isVisible = displayDrugWarning,
+        onConfirm = { displayDrugWarning = false }
+    )
 
     Column( // Outer container
         modifier = Modifier
@@ -115,7 +133,7 @@ fun Analysis(
         ) {
             (usersName)?.let {
                 HighlightText(
-                    prefix = Strings.AnalysisScreenText.Greeting,
+                    prefix = Strings.Screens.Analysis.greetingPrefix,
                     prefixStyle = MaterialTheme.typography.displayMedium,
                     highlight = it,
                     highlightStyle = MaterialTheme.typography.displayLarge,
@@ -129,7 +147,7 @@ fun Analysis(
             verticalAlignment = Alignment.CenterVertically,
             modifier = rowModifier
         ) {
-            StateAnalysisIcon(
+            StateIcon(
                 state = currentAnalysis.state,
                 modifier = Modifier
                     .size(iconSize.dp)
@@ -138,11 +156,10 @@ fun Analysis(
         }
         Row(    // State title text
             modifier = rowModifier
-                .padding()
                 .fillMaxWidth()
         ) {
             HighlightText(
-                prefix = Strings.AnalysisScreenText.YourState,
+                prefix = Strings.Screens.Analysis.currStatePrefix,
                 prefixStyle = MaterialTheme.typography.headlineLarge,
                 highlight = displayValues.title,
                 highlightStyle = MaterialTheme.typography.displayMedium,
@@ -155,42 +172,41 @@ fun Analysis(
                 .fillMaxWidth()
         ) {
             HighlightText(
-                prefix = Strings.AnalysisScreenText.CyclePositionPrefix,
+                prefix = Strings.Screens.Analysis.cyclePosPrefix,
                 prefixStyle = MaterialTheme.typography.headlineSmall,
                 highlight = currentAnalysis.position.toString(),
                 highlightStyle = MaterialTheme.typography.headlineMedium,
-                suffix = Strings.AnalysisScreenText.CyclePositionSuffix,
+                suffix = Strings.Screens.Analysis.cyclePosSuffix,
                 suffixStyle = MaterialTheme.typography.headlineSmall,
                 highlightColor = displayValues.color
             )
         }
         Row(    // Streak length subtitle text
+            verticalAlignment = Alignment.CenterVertically,
             modifier = rowModifier
                 .padding()
                 .fillMaxWidth()
         ) {
             HighlightText(
-                prefix = Strings.AnalysisScreenText.CycleLengthPrefix,
+                prefix = Strings.Screens.Analysis.thisLengthPrefix,
                 prefixStyle = MaterialTheme.typography.headlineSmall,
-                highlight = currentAnalysis.length.toString(),
+                highlight = " " + currentAnalysis.length.toString() + " ",
                 highlightStyle = MaterialTheme.typography.headlineMedium,
-                suffix = if (currentAnalysis.length == 1) "day" else "days",
+                suffix = if (currentAnalysis.length == 1) " day" else " days",
                 suffixStyle = MaterialTheme.typography.headlineSmall,
                 highlightColor = displayValues.color
             )
-        }
-        Row (
-
-        ) {
-            //TODO() refactor typography
             HighlightText(
-                prefix = Strings.AnalysisScreenText.AverageCycleLengthPreffix,
-                prefixStyle = MaterialTheme.typography.titleLarge,
+                prefix = Strings.Screens.Analysis.avgLengthPrefix,
+                prefixStyle = MaterialTheme.typography.titleMedium,
                 highlight = cycleLength.toString(),
-                highlightStyle = MaterialTheme.typography.headlineSmall,
+                highlightStyle = MaterialTheme.typography.titleLarge,
                 suffix = if (cycleLength == 1) "day" else "days",
-                suffixStyle = MaterialTheme.typography.titleLarge,
-                highlightColor = displayValues.color
+                suffixStyle = MaterialTheme.typography.titleMedium,
+                highlightColor = MaterialTheme.colorScheme.primary,
+                baseColor = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier
+                    .padding(start = 48.dp)
             )
         }
         Row(    // Analysis short description text
@@ -214,24 +230,21 @@ fun Analysis(
     }
 }
 
-@Composable
 fun analyze(
-    entries: List<State>,
+    entries: List<Entry>,
     sharedPreferences: SharedPreferences
 ) : CycleAnalysis {
     if (entries.isEmpty()) return CycleAnalysis()
 
-    val savedCycleLength by remember {
-        mutableIntStateOf(sharedPreferences.getInt(Strings.SharedPrefKeys.CycleLength, 0))
-    }
+    val savedCycleLength = sharedPreferences.getInt(Strings.SharedPrefKeys.cycleLength, 0)
     val editor = sharedPreferences.edit()
 
     val recentCycles: MutableList<Cycle> = mutableListOf(Cycle(entries[0]))
 
-    for (state in entries) {
-        if (state.isThisOrPartner(recentCycles.last().getState()))
-            recentCycles.last().iterate(state)
-        else recentCycles.add(Cycle(state = state, length = 1))
+    for (entry in entries) {
+        if (entry.state.isThisOrPartner(recentCycles.last().getState()))
+            recentCycles.last().iterate(entry)
+        else recentCycles.add(Cycle(entry = entry, length = 1))
     }
 
     val adjustedRecentCycles: MutableList<Cycle>  = mutableListOf(recentCycles.last())
@@ -251,25 +264,30 @@ fun analyze(
         else if (recentCycles.last().isUnstable() && recentCycles.last().length > 3) State.UNSTABLE
         else adjustedRecentCycles.last().getState()
 
-    val adjustedCycleLength = ((savedCycleLength * 0.64) + (averageRecentCycleLength * 0.36)) / 2
+    val adjustedCycleLength = if (entries.size < 14) savedCycleLength
+        else calcCycleLength(savedCycleLength, averageRecentCycleLength)
 
     val cyclePosition =
         if (entries.size < savedCycleLength) CyclePosition.UNKNOWN
-        else if (adjustedRecentCycles.last().length < (0.33 * adjustedCycleLength))
-            CyclePosition.BEGINNING
+        else if (adjustedRecentCycles.last().length < (adjustedCycleLength * 0.33))
+            CyclePosition.START
         else if (adjustedRecentCycles.last().length > (0.67 * adjustedCycleLength))
             CyclePosition.END
         else CyclePosition.MIDDLE
 
-    editor.putInt(Strings.SharedPrefKeys.CycleLength, adjustedCycleLength.toInt())
+    editor.putInt(Strings.SharedPrefKeys.cycleLength, adjustedCycleLength)
     editor.apply()
 
     return CycleAnalysis(
         state = currentStateAnalysis,
         length = adjustedRecentCycles.last().length,
-        position = cyclePosition
+        position = cyclePosition,
+        meds = adjustedRecentCycles.last().getMeds(),
+        drugs = adjustedRecentCycles.last().getDrugs()
     )
 }
+
+fun calcCycleLength(old: Int, new: Int): Int { return (((old * 0.64) + (new * 0.36)) / 2).toInt() }
 
 data class AnalysisDisplayValues(
     val color: Color,

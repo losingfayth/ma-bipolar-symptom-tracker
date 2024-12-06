@@ -57,6 +57,8 @@ object Painters {
             @Composable get() = painterResource(id = R.drawable.ic_sentiment_neutral)
         val CalendarDay: Painter
             @Composable get() = painterResource(id = R.drawable.ic_calendar_today)
+        val Trash: Painter
+            @Composable get() = painterResource(id = R.drawable.ic_delete)
     }
     object Filled {
         val AnalysisManic: Painter

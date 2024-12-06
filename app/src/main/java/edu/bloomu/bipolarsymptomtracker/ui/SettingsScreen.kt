@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,12 +30,13 @@ import androidx.compose.ui.unit.dp
 import edu.bloomu.bipolarsymptomtracker.R
 import edu.bloomu.bipolarsymptomtracker.db.EntryViewModel
 import edu.bloomu.bipolarsymptomtracker.ui.components.ConfirmDialog
+import edu.bloomu.bipolarsymptomtracker.ui.components.CycleSlider
 import edu.bloomu.bipolarsymptomtracker.ui.components.SaveFab
 import edu.bloomu.bipolarsymptomtracker.ui.components.SuccessDialog
 import edu.bloomu.bipolarsymptomtracker.ui.components.UsernameField
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Units
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_error
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_button_error
 
 @Composable
 fun SettingsScreen(
@@ -46,15 +46,15 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val sharedPreferences = remember {
-        context.getSharedPreferences(Strings.SharedPrefKeys.SharedPreferences, Context.MODE_PRIVATE)
+        context.getSharedPreferences(Strings.SharedPrefKeys.sharedPrefs, Context.MODE_PRIVATE)
     }
     val editor = sharedPreferences.edit()
 
     var usersName by remember {
-        mutableStateOf(sharedPreferences.getString(Strings.SharedPrefKeys.UserName, ""))
+        mutableStateOf(sharedPreferences.getString(Strings.SharedPrefKeys.userName, ""))
     }
     var cycleLength by remember {
-        mutableIntStateOf(sharedPreferences.getInt(Strings.SharedPrefKeys.CycleLength, 0))
+        mutableIntStateOf(sharedPreferences.getInt(Strings.SharedPrefKeys.cycleLength, 0))
     }
 
     val entries by viewModel.entries.collectAsState()
@@ -62,14 +62,14 @@ fun SettingsScreen(
     var showConfirmDialog by remember { mutableStateOf(false) }
     var showClearSuccessDialog by remember { mutableStateOf(false) }
     var showSaveSuccessDialog by remember { mutableStateOf(false) }
-    var entriesIsNotEmpty by remember { mutableStateOf(entries.isEmpty()) }
+    var entriesIsNotEmpty by remember { mutableStateOf(entries.isNotEmpty()) }
 
     LaunchedEffect(Unit) {
         onFabChange {
             SaveFab(
                 onClick = {
-                    editor.putString(Strings.SharedPrefKeys.UserName, usersName)
-                    editor.putInt(Strings.SharedPrefKeys.CycleLength, cycleLength)
+                    editor.putString(Strings.SharedPrefKeys.userName, usersName)
+                    editor.putInt(Strings.SharedPrefKeys.cycleLength, cycleLength)
                     editor.apply()
                     showSaveSuccessDialog = true
                 }
@@ -109,7 +109,7 @@ fun SettingsScreen(
             modifier = modifier
         ) {
             Text(
-                text = Strings.Settings.Name,
+                text = Strings.Screens.Settings.name,
                 style = MaterialTheme.typography.titleLarge
             )
         }
@@ -135,7 +135,7 @@ fun SettingsScreen(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = Strings.Settings.CycleLength,
+                    text = Strings.Screens.Settings.cycleLength,
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier
                         .padding(
@@ -155,16 +155,9 @@ fun SettingsScreen(
                         text = cycleLength.toString() + " days",
                         style = MaterialTheme.typography.labelLarge
                     )
-                    Slider(
-                        value = cycleLength.toFloat(),
-                        onValueChange = { cycleLength = it.toInt() },
-                        steps = 98,
-                        valueRange = 1f..62f,
-                        modifier = Modifier
-                            .padding(
-                                horizontal = 8.dp
-                            )
-                            .fillMaxWidth()
+                    CycleSlider(
+                        value = cycleLength,
+                        onValueChange = { newValue -> cycleLength = newValue }
                     )
 
                 }
@@ -184,7 +177,7 @@ fun SettingsScreen(
                         showConfirmDialog = true
                         onClick()
                     },
-                    colors = md_theme_light_button_error,
+                    colors = md_theme_button_error,
                     shape = RoundedCornerShape(
                         size = 8.dp
                     ),
@@ -195,7 +188,7 @@ fun SettingsScreen(
                         )
                 ) {
                     Text(
-                        text = Strings.Settings.ClearEntries,
+                        text = Strings.Screens.Settings.clearEntries,
                         style = MaterialTheme.typography.headlineSmall
                     )
                 }
@@ -210,25 +203,23 @@ fun SettingsScreen(
                 entriesIsNotEmpty = false
                 showConfirmDialog = false
             },
-            onCancel = {
-                showConfirmDialog = false
-            },
-            confirmText = Strings.Settings.ConfirmClearDialog.ConfirmText,
-            cancelText = Strings.Settings.ConfirmClearDialog.CancelText
+            onCancel = { showConfirmDialog = false },
+            confirmButton = Strings.Screens.Settings.ConfirmDialog.confirmButton,
+            cancelButton = Strings.Screens.Settings.ConfirmDialog.cancelButton
         )
 
         SuccessDialog(
             isVisible = showClearSuccessDialog,
             onConfirm = { showClearSuccessDialog = false },
-            confirmText = Strings.Settings.SuccessDialog.ClearEntries.Title,
-            bodyText = Strings.Settings.SuccessDialog.ClearEntries.Body
+            title = Strings.Screens.Settings.SuccessDialog.ClearEntries.title,
+            message = Strings.Screens.Settings.SuccessDialog.ClearEntries.body,
         )
 
         SuccessDialog(
             isVisible = showSaveSuccessDialog,
             onConfirm = { showSaveSuccessDialog = false },
-            confirmText = Strings.Settings.SuccessDialog.SaveSettings.Title,
-            bodyText = Strings.Settings.SuccessDialog.SaveSettings.Body
+            title = Strings.Screens.Settings.SuccessDialog.SaveSettings.title,
+            message = Strings.Screens.Settings.SuccessDialog.SaveSettings.body
         )
     }
 }

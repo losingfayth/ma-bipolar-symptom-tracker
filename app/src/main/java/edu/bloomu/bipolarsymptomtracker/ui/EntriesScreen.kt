@@ -25,9 +25,9 @@ import edu.bloomu.bipolarsymptomtracker.db.EntryViewModel
 import edu.bloomu.bipolarsymptomtracker.nav.NavigationItem
 import edu.bloomu.bipolarsymptomtracker.ui.components.EntryCard
 import edu.bloomu.bipolarsymptomtracker.ui.components.NewEntryFab
+import edu.bloomu.bipolarsymptomtracker.ui.theme.Painters
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Units
-import edu.bloomu.bipolarsymptomtracker.ui.theme.Painters
 
 @Composable
 fun Entries(
@@ -60,14 +60,14 @@ fun Entries(
             ) {
                 Icon(
                     painter = Painters.Filled.ErrorFace,
-                    contentDescription = Strings.EntriesScreen.NoEntriesError.IconDesc,
+                    contentDescription = Strings.Screens.Entries.Error.iconAlt,
                     tint = MaterialTheme.colorScheme.error,
                     modifier = Modifier
                         .size(Units.Icons.ExxxtraLarge)
                         .padding(Units.Padding.Icon)
                 )
                 Text(
-                    text = Strings.EntriesScreen.NoEntriesError.Heading,
+                    text = Strings.Screens.Entries.Error.heading,
                     style = MaterialTheme.typography.displayLarge,
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier
@@ -85,7 +85,7 @@ fun Entries(
                     )
             ) {
                 Text(
-                    text = Strings.EntriesScreen.NoEntriesError.Subheading,
+                    text = Strings.Screens.Entries.Error.subheading,
                     style = MaterialTheme.typography.displaySmall
                 )
             }
@@ -105,7 +105,7 @@ fun Entries(
             ) {
 
                 Text(
-                    text = Strings.EntriesScreen.NoEntriesError.ClickHere,
+                    text = Strings.Screens.Entries.Error.hint,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier
@@ -138,9 +138,10 @@ fun Entries(
                     entry = entry,
                     onClick = {
                         navController.navigate(
-                            route = NavigationItem.EntryScreen.route + "/" + entry.id
+                            route = NavigationItem.EditEntry.route + "/" + entry.id
                         )
                     },
+                    onDelete = { viewModel.deleteEntry(entry) },
                     modifier = Modifier
                 )
             }

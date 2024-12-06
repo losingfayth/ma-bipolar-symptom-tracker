@@ -17,14 +17,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 
+/**
+ * Allows the user to set/update their username
+ *
+ * @param currName The name currently stored
+ * @param onValueChange Allows the parent to save the updated name
+ */
 @Composable
 fun UsernameField(
-    currName: String,
+    currName: String = "",
     onValueChange: (String) -> Unit = {}
 ) {
-    var name by remember{ mutableStateOf(currName) }
+    var name by remember{ mutableStateOf("") }
+
     TextField(
-        value = name,
+        value = currName,
         onValueChange = { newValue ->
             name = newValue
             onValueChange(name)
@@ -33,7 +40,7 @@ fun UsernameField(
         singleLine = true,
         placeholder = {
             Text(
-                text = Strings.WelcomeText.NameEntry,
+                text = Strings.Components.UsernameField.placeholder,
                 style = MaterialTheme.typography.titleMedium
             )
         },
@@ -42,6 +49,19 @@ fun UsernameField(
     )
 }
 
+/**
+ * Formats strings to make a certain portion of the string appear more prominently
+ *
+ * @param prefix The section of string before the highlighted portion
+ * @param prefixStyle The text formatting for the prefix
+ * @param highlight The section of string to display prominently
+ * @param highlightStyle The text formatting for the highlighted portion
+ * @param suffix The section of string after the highlighted portion
+ * @param suffixStyle The text formatting for the suffix
+ * @param baseColor The color to use for the prefix, suffix
+ * @param highlightColor The color to use for the highlighted portion
+ * @param modifier Formatting
+ */
 @Composable
 fun HighlightText(
     prefix: String,
@@ -51,7 +71,8 @@ fun HighlightText(
     suffix: String? = null,
     suffixStyle: TextStyle? = null,
     baseColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
-    highlightColor: Color = MaterialTheme.colorScheme.tertiary
+    highlightColor: Color = MaterialTheme.colorScheme.tertiary,
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = buildAnnotatedString {
@@ -72,6 +93,7 @@ fun HighlightText(
                     )
                 ) { append(suffix) }
             }
-        }
+        },
+        modifier = modifier
     )
 }

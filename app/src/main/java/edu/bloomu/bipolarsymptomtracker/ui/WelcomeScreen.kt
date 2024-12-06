@@ -10,11 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -26,12 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.bloomu.bipolarsymptomtracker.R
 import edu.bloomu.bipolarsymptomtracker.nav.NavigationItem
+import edu.bloomu.bipolarsymptomtracker.ui.components.CycleSlider
 import edu.bloomu.bipolarsymptomtracker.ui.components.HighlightText
 import edu.bloomu.bipolarsymptomtracker.ui.components.UsernameField
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Units
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_primary
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_state_hypo_manic
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_button_primary
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_state_hypo_manic
 
 @Composable
 fun InitialSetup(
@@ -40,12 +40,12 @@ fun InitialSetup(
 ) {
     val context = LocalContext.current
     val sharedPreferences = remember {
-        context.getSharedPreferences(Strings.SharedPrefKeys.SharedPreferences, Context.MODE_PRIVATE)
+        context.getSharedPreferences(Strings.SharedPrefKeys.sharedPrefs, Context.MODE_PRIVATE)
     }
     val editor = sharedPreferences.edit()
 
-    var usersName by remember { mutableStateOf(Strings.WelcomeText.NameEntry) }
-    var cycleLength by remember { mutableFloatStateOf(15f) }
+    var usersName by remember { mutableStateOf(Strings.Screens.Welcome.nameEntry) }
+    var cycleLength by remember { mutableIntStateOf(15) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -64,18 +64,18 @@ fun InitialSetup(
             modifier = modifier
         ) {
             HighlightText(
-                prefix = Strings.WelcomeText.TitlePrefix,
+                prefix = Strings.Screens.Welcome.titlePrefix,
                 prefixStyle = MaterialTheme.typography.displayMedium,
-                highlight = Strings.WelcomeText.TitleHighlight,
+                highlight = Strings.Screens.Welcome.titleHighlight,
                 highlightStyle = MaterialTheme.typography.displayMedium,
-                highlightColor = md_theme_light_state_hypo_manic
+                highlightColor = md_theme_state_hypo_manic
             )
         }
         Row(
             modifier = modifier
         ) {
             HighlightText(
-                prefix = Strings.WelcomeText.Blurb,
+                prefix = Strings.Screens.Welcome.blurb,
                 prefixStyle = MaterialTheme.typography.headlineSmall,
                 highlight = stringResource(R.string.app_name),
                 highlightStyle = MaterialTheme.typography.headlineMedium
@@ -104,7 +104,7 @@ fun InitialSetup(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = Strings.WelcomeText.CycleLength,
+                    text = Strings.Screens.Welcome.cycleLength,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Row(
@@ -114,19 +114,12 @@ fun InitialSetup(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = cycleLength.toInt().toString() + " days",
+                        text = cycleLength.toString() + " days",
                         style = MaterialTheme.typography.labelLarge
                     )
-                    Slider(
+                    CycleSlider(
                         value = cycleLength,
-                        onValueChange = { cycleLength = it },
-                        steps = 98,
-                        valueRange = 1f..62f,
-                        modifier = Modifier
-                            .padding(
-                                horizontal = 8.dp
-                            )
-                            .fillMaxWidth()
+                        onValueChange = { newValue -> cycleLength = newValue }
                     )
                 }
             }
@@ -135,30 +128,31 @@ fun InitialSetup(
             modifier = modifier
         ) {
             Text(
-                text = Strings.WelcomeText.Disclaimer,
+                text = Strings.Screens.Welcome.disclaimer,
                 style = MaterialTheme.typography.titleSmall
             )
         }
         Row {
             Button(
                 onClick = {
-                    editor.putInt(Strings.SharedPrefKeys.CycleLength, cycleLength.toInt())
-                    editor.putString(Strings.SharedPrefKeys.UserName,
-                        if (usersName == Strings.WelcomeText.NameEntry) "User" else usersName)
-                    editor.putBoolean(Strings.SharedPrefKeys.SetupCompleted, true)
+                    editor.putInt(Strings.SharedPrefKeys.cycleLength, cycleLength)
+                    editor.putString(Strings.SharedPrefKeys.userName,
+                        if (usersName == Strings.Screens.Welcome.nameEntry) "User" else usersName)
+                    editor.putBoolean(Strings.SharedPrefKeys.setupCompleted, true)
                     editor.apply()
                     onClick()
                     navController.navigate(NavigationItem.Analysis.route)
                 },
-                colors = md_theme_light_button_primary,
+                colors = md_theme_button_primary,
                 modifier = Modifier
                     .size(
                         width = 220.dp,
                         height = 64.dp
                     )
+                    .padding(vertical = 4.dp)
             ) {
                 Text(
-                    text = Strings.WelcomeText.ButtonText,
+                    text = Strings.Screens.Welcome.submitButton,
                     style = MaterialTheme.typography.headlineSmall
                 )
             }

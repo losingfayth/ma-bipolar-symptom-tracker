@@ -1,17 +1,25 @@
 package edu.bloomu.bipolarsymptomtracker.model
 
+import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
+
+/**
+ * An indicator for where the user currently is in their cycle
+ */
 enum class CyclePosition {
-    BEGINNING,
+    START,
     MIDDLE,
     END,
     UNKNOWN;
 
+    /**
+     * @return a display string to use on the Analysis screen
+     */
     override fun toString(): String {
         return when(this) {
-            BEGINNING -> " in the beginning  "
-            MIDDLE -> " in the middle  "
-            END -> " at the end  "
-            UNKNOWN -> " at an unknown point  "
+            START -> Strings.Model.CyclePositions.start
+            MIDDLE -> Strings.Model.CyclePositions.middle
+            END -> Strings.Model.CyclePositions.end
+            UNKNOWN -> Strings.Model.CyclePositions.unknown
         }
     }
 }

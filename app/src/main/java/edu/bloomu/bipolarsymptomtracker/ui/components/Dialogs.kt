@@ -17,14 +17,22 @@ import androidx.compose.ui.unit.dp
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Painters
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Strings
 import edu.bloomu.bipolarsymptomtracker.ui.theme.Units
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_error
-import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_light_button_secondary
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_button_error
+import edu.bloomu.bipolarsymptomtracker.ui.theme.md_theme_button_secondary
 
+/**
+ * Allows a screen to indicate to a user that an action has performed successfully
+ *
+ * @param title Dialog title
+ * @param message Message to display to user
+ * @param isVisible Whether to show the dialog
+ * @param onConfirm Closes the dialog
+ */
 @Composable
 fun SuccessDialog(
-    confirmText: String,
-    bodyText: String,
-    isVisible: Boolean, // State to control dialog visibility
+    title: String,
+    message: String,
+    isVisible: Boolean,
     onConfirm: () -> Unit
 ) {
     if (isVisible) {
@@ -38,7 +46,7 @@ fun SuccessDialog(
             onDismissRequest = { onConfirm() }, // Dismiss when clicked outside
             title = {
                 Text(
-                    text = confirmText,
+                    text = title,
                     style = MaterialTheme.typography.headlineLarge,
                     modifier = modifier
                 )
@@ -51,8 +59,8 @@ fun SuccessDialog(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = bodyText,
-                        style = MaterialTheme.typography.headlineMedium,
+                        text = message,
+                        style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = modifier
                     )
@@ -62,30 +70,38 @@ fun SuccessDialog(
             dismissButton = {
                 Button(
                     onClick = { onConfirm() },
-                    colors = md_theme_light_button_secondary
+                    colors = md_theme_button_secondary
                 ) {
                     Text(
-                        text = Strings.Settings.SuccessDialog.SaveSettings.Button,
+                        text = Strings.Components.Dialogs.Success.dismiss,
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
-            },
-            modifier = Modifier
-                .size(
-                    width = 600.dp,
-                    height = 360.dp
-                )
+            }
         )
     }
 }
 
+/**
+ * Allows a screen to prompt for user confirmation after an action is taken
+ *
+ * @param confirmButton The text for the confirm button
+ * @param cancelButton The text for the cancel button
+ * @param title The title for the dialog
+ * @param message The message to display to the user
+ * @param isVisible Whether to show the dialog
+ * @param onConfirm Allows parent to take action and closes dialog
+ * @param onCancel Closes dialog
+ */
 @Composable
 fun ConfirmDialog(
-    confirmText: String,
-    cancelText: String,
-    isVisible: Boolean, // State to control dialog visibility
-    onConfirm: () -> Unit, // Action to perform on "Confirm"
-    onCancel: () -> Unit // Default: dismiss dialog
+    confirmButton: String = Strings.Components.Dialogs.Confirm.confirm,
+    cancelButton: String = Strings.Components.Dialogs.Confirm.cancel,
+    title: String = Strings.Components.Dialogs.Confirm.title,
+    message: String = Strings.Components.Dialogs.Confirm.message,
+    isVisible: Boolean,
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit
 ) {
     if (isVisible) {
         val modifier = Modifier
@@ -98,7 +114,7 @@ fun ConfirmDialog(
             onDismissRequest = { onCancel() }, // Dismiss when clicked outside
             title = {
                 Text(
-                    text = confirmText,
+                    text = title,
                     style = MaterialTheme.typography.headlineLarge,
                     modifier = modifier
                 )
@@ -120,7 +136,7 @@ fun ConfirmDialog(
                             )
                     )
                     Text(
-                        text = Strings.Settings.ConfirmClearDialog.Message,
+                        text = message,
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.error,
                         modifier = modifier
@@ -130,10 +146,10 @@ fun ConfirmDialog(
             confirmButton = {
                 Button(
                     onClick = { onConfirm() },
-                    colors = md_theme_light_button_error
+                    colors = md_theme_button_error
                 ) {
                     Text(
-                        text = Strings.Settings.ConfirmClearDialog.ConfirmText,
+                        text = confirmButton,
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
@@ -141,10 +157,10 @@ fun ConfirmDialog(
             dismissButton = {
                 Button(
                     onClick = { onCancel() },
-                    colors = md_theme_light_button_secondary
+                    colors = md_theme_button_secondary
                 ) {
                     Text(
-                        text = cancelText,
+                        text = cancelButton,
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
