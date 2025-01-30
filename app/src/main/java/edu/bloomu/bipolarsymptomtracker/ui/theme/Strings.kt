@@ -36,7 +36,7 @@ object Strings {
                 val body = "Drug use will have a bigger impact on you than it would somebody else " +
                         "and can impact your state a lot, making you erratic or very intensely " +
                         "emotional. Avoid using drugs not prescribed by your doctor (including " +
-                        "alcohol and caffeine."
+                        "alcohol and caffeine)"
             }
         }
         object Entries {

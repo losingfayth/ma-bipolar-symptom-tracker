@@ -15,9 +15,9 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.BipolarSymptomTracker">
+            android:theme="@style/Theme.BipolarSymptomTracker"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,68 +1,9 @@
 <resources>
     <string name="app_name">biPerfect</string>
 
-    <string name="md_ref_symptom_mania_temper_title">Irritable or short tempered</string>
-    <string name="md_ref_symptom_mania_energy_title">Very energetic</string>
-    <string name="md_ref_symptom_mania_ego_title">Inflated self worth</string>
-    <string name="md_ref_symptom_mania_sleep_title">Sleeping less or needing less sleep</string>
-    <string name="md_ref_symptom_mania_speech_title">Talking a lot or speaking quickly</string>
-    <string name="md_ref_symptom_mania_racing_title">Racing thoughts</string>
-    <string name="md_ref_symptom_mania_distract_title">Easily distracted</string>
-    <string name="md_ref_symptom_mania_reckless_title">Acting recklessly</string>
-    <string name="md_ref_symptom_mania_sex_title">Increased sex drive</string>
-    <string name="md_ref_symptom_mania_money_title">Spending a lot of money</string>
-    <string name="md_ref_symptom_depression_motivation_title">Low or no motivation to do things</string>
-    <string name="md_ref_symptom_depression_hobbies_title">Hobbies are boring or uninteresting</string>
-    <string name="md_ref_symptom_depression_sleep_title">Sleeping more</string>
-    <string name="md_ref_symptom_depression_restless_title">Feeling restless</string>
-    <string name="md_ref_symptom_depression_slow_title">Moving more slowly</string>
-    <string name="md_ref_symptom_depression_energy_title">Feeling very low energy or exhausted</string>
-    <string name="md_ref_symptom_depression_think_title">Trouble thinking clearly</string>
-    <string name="md_ref_symptom_depression_concentrate_title">Trouble concentrating</string>
-    <string name="md_ref_symptom_depression_suicidal_title">Feeling suicidal or wanting to self harm</string>
-    <string name="md_ref_symptom_depression_sex_title">Decreased or no sex drive</string>
-
-
-    <string name="md_ref_symptom_mania_temper_desc">TEMP</string>
-    <string name="md_ref_symptom_mania_energy_desc">TEMP</string>
-    <string name="md_ref_symptom_mania_ego_desc">TEMP</string>
-    <string name="md_ref_symptom_mania_sleep_desc">TEMP</string>
-    <string name="md_ref_symptom_mania_speech_desc">TEMP</string>
-    <string name="md_ref_symptom_mania_racing_desc">TEMP</string>
-    <string name="md_ref_symptom_mania_distract_desc">TEMP</string>
-    <string name="md_ref_symptom_mania_reckless_desc">TEMP</string>
-    <string name="md_ref_symptom_mania_sex_desc">TEMP</string>
-    <string name="md_ref_symptom_mania_money_desc">TEMP</string>
-
-    <string name="md_ref_symptom_depression_motivation_desc">TEMP</string>
-    <string name="md_ref_symptom_depression_hobbies_desc">TEMP</string>
-    <string name="md_ref_symptom_depression_sleep_desc">TEMP</string>
-    <string name="md_ref_symptom_depression_restless_desc">TEMP</string>
-    <string name="md_ref_symptom_depression_slow_desc">TEMP</string>
-    <string name="md_ref_symptom_depression_energy_desc">TEMP</string>
-    <string name="md_ref_symptom_depression_think_desc">TEMP</string>
-    <string name="md_ref_symptom_depression_concentrate_desc">TEMP</string>
-    <string name="md_ref_symptom_depression_suicidal_desc">TEMP</string>
-    <string name="md_ref_symptom_depression_sex_desc">TEMP</string>
-
-
-
-    <string name="title_activity_entry_screen">EntryScreenActivity</string>
-    <string name="title_activity_setup">SetupActivity</string>
-
-
-    <string name="md_ref_home_new_entry_title">New entry</string>
-    <string name="md_ref_home_view_entries_title">View entries</string>
-    <string name="md_ref_home_cycle_analysis_title">Cycle analysis</string>
-    <string name="md_ref_home_new_entry_desc">Add a new entry for today</string>
-    <string name="md_ref_home_view_entries_desc">View and edit old entries</string>
-    <string name="md_ref_home_cycle_analysis_desc">See where you are in your cycle</string>
-
     <string name="md_ref_mood_v_low_desc">Very low</string>
     <string name="md_ref_mood_low_desc">Low</string>
     <string name="md_ref_mood_neutral_desc">Neutral</string>
     <string name="md_ref_mood_high_desc">High</string>
     <string name="md_ref_mood_v_high_desc">Very high</string>
-
-    <string name="title_activity_view_entries">ViewEntriesActivity</string>
 </resources>

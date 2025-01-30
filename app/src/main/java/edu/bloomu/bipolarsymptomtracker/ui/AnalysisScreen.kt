@@ -72,16 +72,6 @@ fun Analysis(
 
     val entries by viewModel.entries.collectAsState() // Entries from database
 
-
-    // Only analyze past ~month of entries
-    // (this assumes the user only makes on entry per day)
-    // Use algorithm to determine user's Bipolar state
-    /*
-    val currentAnalysis = analyze(
-        entries = entries.takeLast(35).reversed(),
-        sharedPreferences = sharedPreferences
-    )*/
-
     val currentAnalysis by remember { mutableStateOf(analyze(entries = entries.takeLast(35).reversed(),
         sharedPreferences = sharedPreferences))}
 
