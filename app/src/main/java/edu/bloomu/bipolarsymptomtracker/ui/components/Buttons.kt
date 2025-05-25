@@ -173,7 +173,8 @@ fun NavButton(
         Icon(
             painter = icon,
             contentDescription = null,
-            modifier = Modifier
+            modifier = Modifier,
+            
         )
         Text(
             text = text,

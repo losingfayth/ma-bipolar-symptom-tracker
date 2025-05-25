@@ -1,39 +1,18 @@
 package edu.bloomu.bipolarsymptomtracker.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import edu.bloomu.bipolarsymptomtracker.R
 
 // Set of Material typography styles to start with
-/*
-val Typography = Typography(
-    
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily(Font(R.font.FontFamily(Font(R.font.baloo2)))),
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    ),
-    titleLarge = TextStyle(
-        fontFamily = FontFamily(Font(R.font.FontFamily(Font(R.font.baloo2)))),
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily(Font(R.font.FontFamily(Font(R.font.baloo2)))),
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-)*/
 
 val Typography = Typography(
     displayLarge = TextStyle(
@@ -127,3 +106,23 @@ val Typography = Typography(
         lineHeight = 16.sp
     )
 )
+
+// Question: Do we think this will work?
+// Answer: No. But we can give it a shot, I guess...
+@Composable
+fun dynamicStyle(
+    staticStyle: TextStyle
+) : TextStyle {
+    val fontSizeDp: Dp = with(LocalDensity.current) { staticStyle.fontSize.toDp() }
+    val lineHeightDp: Dp = with(LocalDensity.current) { staticStyle.lineHeight.toDp() }
+
+    val fontSizeSp: TextUnit = with(LocalDensity.current) { fontSizeDp.toSp() }
+    val lineHeightSp: TextUnit = with(LocalDensity.current) { lineHeightDp.toSp() }
+
+    return TextStyle(
+        fontFamily = staticStyle.fontFamily,
+        fontWeight = staticStyle.fontWeight,
+        fontSize = fontSizeSp,
+        lineHeight = lineHeightSp
+    )
+}
